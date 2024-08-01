@@ -9,5 +9,4 @@ public class HospitalBedSystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HospitalBedSystemApplication.class, args);
 	}
-	//test
 }
