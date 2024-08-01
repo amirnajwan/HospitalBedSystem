@@ -6,23 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class UserController {
     @Autowired
     private UserService service;
 
     // Post
-    @PostMapping("/addUser")
-    public ResponseEntity<?> addUser(@RequestBody UserEntity user){
-        return service.saveUser(user);
-    }
+    // @PostMapping("/addUser")
+    // public ResponseEntity<?> addUser(@RequestBody UserEntity user){
+    //     return service.saveUser(user);
+    // }
 
-//    @PostMapping("/addUsers")
-//    public List<UserEntity> addUsers(@RequestBody List<UserEntity> users){
-//        return service.saveUsers(users);
-//    }
+    //    @PostMapping("/login")
+    //    public ResponseEntity<?> loginUser(@RequestBody UserEntity user) {
+    //        return service.login(user.getUsername(), user.getPassword());
+    //    }
+
+
+    //    @PostMapping("/addUsers")
+    //    public List<UserEntity> addUsers(@RequestBody List<UserEntity> users){
+    //        return service.saveUsers(users);
+    //    }
 
     // Get
     @GetMapping("/users")

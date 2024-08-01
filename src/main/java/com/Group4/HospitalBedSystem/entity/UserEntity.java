@@ -20,8 +20,10 @@ public class UserEntity {
     private String name;
     private String position;
     private String department;
-    private String phonenumber;
+    private String phoneNumber;
     private String email;
+    private boolean isAdmin;
+    private boolean isDoctor;
 
     public int getId() {
         return id;
@@ -71,12 +73,12 @@ public class UserEntity {
         this.department = department;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -85,5 +87,21 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean isDoctor() {
+        return isDoctor;
+    }
+
+    public void setDoctor(boolean isDoctor) {
+        this.isDoctor = isDoctor;
     }
 }

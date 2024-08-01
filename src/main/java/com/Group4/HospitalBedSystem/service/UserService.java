@@ -1,10 +1,10 @@
 package com.Group4.HospitalBedSystem.service;
 
+import com.Group4.HospitalBedSystem.dto.response.LoginResponse;
 import com.Group4.HospitalBedSystem.dto.response.UserResponse;
 import com.Group4.HospitalBedSystem.entity.UserEntity;
 import com.Group4.HospitalBedSystem.repository.UserRepository;
 import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -35,10 +34,12 @@ public class UserService {
                 result.setData(user);
                 return ResponseEntity.ok(result);
             } else {
-                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+                result.setMessage("Failed to add user");
+                return new ResponseEntity<>(result, HttpStatus.OK);
             }
         }catch (Exception e){
-            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            result.setMessage("Failed to add user : " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -163,17 +164,44 @@ public class UserService {
         UserResponse data = new UserResponse();
         data.setId(userEntity.getId());
         data.setName(userEntity.getName());
+        data.setUsername(userEntity.getUsername());
         data.setEmail(userEntity.getEmail());
         data.setDepartment(userEntity.getDepartment());
         data.setPassword(userEntity.getPassword());
         data.setPosition(userEntity.getPosition());
         data.setDepartment(userEntity.getDepartment());
+        data.setPhoneNumber(userEntity.getPhoneNumber());
+        data.setAdmin(userEntity.isAdmin());
+        data.setDoctor(userEntity.isDoctor());
         return data;
     }
 
-    public UserEntity login(String username, String password){
+    public ResponseEntity<?> login(String username, String password){
 //        UserEntity user = repository.findUsernameAndPassword(username, password);
 //        return user;
-        return new UserEntity();
+        LoginResponse data = new LoginResponse();
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try{
+            UserEntity user = repository.findUserByUsername(username);
+            if (user != null && user.getPassword().equals(password)) {
+                data.setUsername(username);
+                data.setRole(user.getPosition());
+                data.setLoginSuccess(true);
+                result.setMessage("login success");
+                result.setData(data);
+                result.setSuccess(true);
+                return ResponseEntity.ok(result);
+            } else {
+                data.setUsername(username);
+                result.setSuccess(true);
+                result.setData(data);
+                result.setMessage("Invalid username or password");
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            result.setMessage(e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

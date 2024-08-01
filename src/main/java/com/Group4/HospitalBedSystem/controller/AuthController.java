@@ -2,30 +2,24 @@ package com.Group4.HospitalBedSystem.controller;
 
 import com.Group4.HospitalBedSystem.entity.UserEntity;
 import com.Group4.HospitalBedSystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
+    @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
-    public ModelAndView login(){
-        ModelAndView mav = new ModelAndView("login");
-        mav.addObject("user", new UserEntity());
-        return mav;
+    @PostMapping("/api/v1/login")
+    public ResponseEntity<?> loginUser(@RequestBody UserEntity user) {
+        return userService.login(user.getUsername(), user.getPassword());
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute("user") UserEntity user){
-        UserEntity oauthUser = userService.login(user.getUsername(), user.getPassword());
-        if (oauthUser != null) {
-            return "redirect:/";
-        } else {
-            return "redirect:/login";
-        }
+    @PostMapping("/api/v1/register")
+    public ResponseEntity<?> addUser(@RequestBody UserEntity user){
+        return userService.saveUser(user);
     }
+
 }

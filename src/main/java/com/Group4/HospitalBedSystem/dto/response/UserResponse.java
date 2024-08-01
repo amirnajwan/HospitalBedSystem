@@ -1,6 +1,5 @@
 package com.Group4.HospitalBedSystem.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data
@@ -13,6 +12,8 @@ public class UserResponse {
     private String position;
     private String department;
     private String phoneNumber;
+    private boolean isAdmin;
+    private boolean isDoctor;
 
     public int getId() {
         return id;
@@ -76,5 +77,21 @@ public class UserResponse {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean isDoctor() {
+        return isDoctor;
+    }
+
+    public void setDoctor(boolean isDoctor) {
+        this.isDoctor = isDoctor;
     }
 }
