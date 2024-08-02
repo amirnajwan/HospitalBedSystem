@@ -71,15 +71,18 @@
     <script>
         $(document).ready(function () {
             // not sure if have another way to get params
-            function getUrlParameter(name) {
-                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-                var results = regex.exec(location.search);
-                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-            }
+            // function getUrlParameter(name) {
+            //     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            //     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            //     var results = regex.exec(location.search);
+            //     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            // }
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var fromValue = urlParams.get('from');
 
             // Get the 'from' parameter from the URL
-            var fromValue = getUrlParameter('from');
+            // var fromValue = getUrlParameter('from');
 
             // You can also use it directly in your logic here
             console.log("From: " + fromValue);

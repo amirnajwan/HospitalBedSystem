@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -17,13 +17,17 @@
             white-space: nowrap;
             border: none;
             background: none;
-            color: #007bff; /* Link color */
+            color: #007bff;
+            /* Link color */
             cursor: pointer;
         }
+
         .btn-link-like:hover {
             text-decoration: underline;
-            color: #0056b3; /* Darker color on hover */
+            color: #0056b3;
+            /* Darker color on hover */
         }
+
         .btn-link-like:focus {
             outline: none;
         }
@@ -50,10 +54,7 @@
                                 </div>
                                 <button class="mt-2 btn btn-primary w-100 py-2" type="submit">Log in</button>
                             </form>
-                            <form id="registerForm" action="/register" method="get" class="mt-1" >
-                                <input type="hidden" name="from" value="login">
-                                <button type="submit" class="btn-link-like">Register</button>
-                            </form>
+                            <a class="nav-link" th:href="@{/register(from='login')}">Register a new account</a>
                             <p class="mt-5 mb-3 text-body-secondary">&copy; 2024</p>
                         </main>
                     </div>
@@ -83,7 +84,13 @@
                     success: function (response) {
                         if (response.data != null && response.data.loginSuccess == true) {
                             alert('Login success: ' + response.message);
-                            window.location.href = '/home'; // Redirect to home page
+                            // Prepare parameters
+                            const params = new URLSearchParams({
+                                userId: response.data.userId,
+                            }).toString();
+                            // Redirect to index page with parameters
+                            window.location.href = '/index?' + params;
+                            // window.location.href = '/index'; // Redirect to index page
                         } else {
                             alert('Login failed: ' + response.message);
                         }

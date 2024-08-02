@@ -4,25 +4,35 @@ import lombok.Data;
 
 @Data
 public class LoginResponse {
-    private String username;
+    private int userId;
+    private String name;
     private String role;
     private boolean loginSuccess;
 
     public LoginResponse() {
     }
 
-    public LoginResponse(String username, String role, boolean loginSuccess) {
-        this.username = username;
+    public LoginResponse(int userId, String name, String role, boolean loginSuccess) {
+        this.userId = userId;
+        this.name = name;
         this.role = role;
         this.loginSuccess = loginSuccess;
     }
 
-    public String getUsername() {
-        return username;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRole() {

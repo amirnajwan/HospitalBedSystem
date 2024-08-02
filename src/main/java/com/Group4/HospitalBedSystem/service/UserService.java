@@ -184,15 +184,16 @@ public class UserService {
         try{
             UserEntity user = repository.findUserByUsername(username);
             if (user != null && user.getPassword().equals(password)) {
-                data.setUsername(username);
-                data.setRole(user.getPosition());
+                data.setUserId(user.getId());
+                data.setName(user.getName());
+                data.setRole(user.isAdmin() == true ? "ADMIN" : "DOCTOR");
                 data.setLoginSuccess(true);
                 result.setMessage("login success");
                 result.setData(data);
                 result.setSuccess(true);
                 return ResponseEntity.ok(result);
             } else {
-                data.setUsername(username);
+                data.setName(username);
                 result.setSuccess(true);
                 result.setData(data);
                 result.setMessage("Invalid username or password");

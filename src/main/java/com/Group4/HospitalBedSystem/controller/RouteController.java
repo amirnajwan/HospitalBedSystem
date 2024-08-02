@@ -6,13 +6,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RouteController {
-    @GetMapping("/login")
+
+    // route pages
+    @GetMapping("/")
     public String login() {
         return "auth/login";
     }
-    @GetMapping("/home")
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
+    @GetMapping("/page1") // sambung disini
     public String home() {
-        return "home";
+        return "page1";
     }
     @GetMapping("/register")
     public String register(@RequestParam(name = "from", required = false) String from) {
@@ -21,5 +27,19 @@ public class RouteController {
     @GetMapping("/logout")
     public String logout() {
         return "auth/login";
+    }
+
+    // utils
+    @GetMapping("/sidebar")
+    public String sidebar() {
+        return "utils/sidebar";
+    }
+    @GetMapping("/footer")
+    public String footer() {
+        return "utils/footer";
+    }
+    @GetMapping("/header")
+    public String header() {
+        return "utils/header";
     }
 }
