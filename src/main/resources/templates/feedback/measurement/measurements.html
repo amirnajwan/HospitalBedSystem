@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- boleh jadikan contoh -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>Satisfaction Categories</title>
+</head>
+
+<body>
+<!-- Header container -->
+<div id="header-container"></div>
+
+<div id="wrapper">
+    <!-- Sidebar container -->
+    <div id="sidebar-container"></div>
+
+    <!-- Page content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <h1 class="mt-4">Measurements Table</h1>
+            <p>This is the lastest measurement item for Patient Satisfaction Feedback</p>
+            <div class="addItem">
+                <a href="/measurements/add">Add Measurement</a>
+            </div>
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="measurement : ${measurements}">
+                    <td th:text="${measurement.name}"></td>
+                    <td th:text="${measurement.category.name}"></td>
+                    <td>
+                        <a th:href="@{/measurements/edit/{id}(id=${measurement.id})}">Edit</a>
+                        <a th:href="@{/measurements/delete/{id}(id=${measurement.id})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Footer container -->
+<div id="footer-container"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(async function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var userId = urlParams.get('userId');
+        const url = "http://localhost:8080/userById/" + userId;
+        var userData;
+        var loginType;
+        try {
+            userData = await fetchData(url);
+            console.log(userData);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+        if (userData.success == true) {
+            loginType = userData.data.admin == true ? "ADMIN" : "DOCTOR";
+        }
+        $("#header-container").load("header");
+        $("#sidebar-container").load("sidebar", function () {
+            // Dynamically set sidebar heading from URL
+            $("#sidebar-heading").text(loginType + " VIEW");
+        });
+        $("#footer-container").load("footer");
+    });
+
+    async function fetchData(url) {
+        return $.ajax({
+            url: url,
+            type: 'GET'
+        });
+    }
+</script>
+</body>
+
+</html>

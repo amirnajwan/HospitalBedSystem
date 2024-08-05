@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Patient Satisfaction Form</title>
+</head>
+<body>
+<div class="card">
+    <div class="card-header">
+        <h1 class="mb-0">Patient Satisfaction Form</h1>
+    </div>
+    <div class="card-body">
+        <form id="satisfactionForm" th:action="@{/submit-satisfaction}" method="post">
+            <div th:each="category : ${categories}">
+                <h2 th:text="${category.name}">Category Name</h2>
+                <div th:each="measurement : ${category.measurements}">
+                    <label th:text="${measurement.name}">Measurement Name</label>
+                    <select name="ratings" th:name="${category.id}_${measurement.id}">
+                        <option value="1">Strongly Disagree</option>
+                        <option value="2">Disagree</option>
+                        <option value="3">Not Sure</option>
+                        <option value="4">Agree</option>
+                        <option value="5">Strongly Agree</option>
+                    </select>
+                    <br>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

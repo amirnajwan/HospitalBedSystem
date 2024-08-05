@@ -5,5 +5,28 @@
         <a href="/index?userId=1" class="list-group-item list-group-item-action bg-light">Dashboard</a>
         <a href="/page1?userId=1" class="list-group-item list-group-item-action bg-light">Page 1</a>
         <a href="" class="list-group-item list-group-item-action bg-light">Page 2</a>
+
+        <!-- Patient Satisfaction Expanded Menu -->
+        <a class="list-group-item list-group-item-action py-2 ripple" aria-current="true"
+           data-mdb-collapse-init href="#menupatientsatisfaction" aria-expanded="true"
+           aria-controls="collapseExample1">
+            <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Patient Satisfaction Management</span>
+        </a>
+        <!-- Collapsed content -->
+        <ul id="PatientSatisfactionManagement" class="collapse show list-group list-group-flush">
+            <li class="list-group-item py-1">
+                <a href="/categories?userId=1" class="text-reset">Category</a>
+            </li>
+            <li class="list-group-item py-1">
+                <a href="/measurements?userId=1" class="text-reset">Measurement</a>
+            </li>
+            <li class="list-group-item py-1">
+                <a href="" class="text-reset">Submit New Satisfaction</a>
+            </li>
+            <li class="list-group-item py-1">
+                <a href="" class="text-reset">View Satisfaction Report</a>
+            </li>
+        </ul>
+        <!-- end Patient Satisfaction Expanded Menu -->
     </div>
 </div>
