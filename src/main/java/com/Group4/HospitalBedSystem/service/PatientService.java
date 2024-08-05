@@ -24,35 +24,35 @@ public class PatientService {
             if (patient != null) {
                 if (repository.save(patient) != null) {
                     result.setSuccess(true);
-                    result.setMessage("Added new patient");
+                    result.setMessage("Added new patient.");
                     result.setData(patient);
                 } else {
                     result.setMessage("Failed to add patient");
                 }
-                System.out.println("test from PatentService Class");
+                System.out.println("test from PatientService Class.");
                 result.setData(patient);
                 return ResponseEntity.ok(result);
             } else {
-
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
-        }catch (Exception e){
+        } catch (Exception e){
             result.setMessage(e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    //Get methods
     public ResponseEntity<?> getPatients(){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         List<PatientEntity> patients = new ArrayList<>();
         try {
             patients = repository.findAll();
-        }catch (Exception e){
-            System.out.print("testttt" + e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
         if (patients != null){
             result.setSuccess(true);
-            result.setMessage("Patient found");
+            result.setMessage("Patient found.");
             List<PatientResponse> patientList = new ArrayList<>();
             for (PatientEntity patient : patients) {
                 patientList.add(mapPatientEntityToPatientDetail(patient));
@@ -76,7 +76,7 @@ public class PatientService {
                 result.setMessage("Patient not found.");
             }
             return ResponseEntity.ok(result);
-        }catch (Exception e){
+        } catch (Exception e){
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -84,25 +84,26 @@ public class PatientService {
     public ResponseEntity<?> getPatientByName(String name){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
-            PatientEntity patient = repository.findUserByName(name);
+            PatientEntity patient = repository.findPatientByName(name);
             if (patient != null){
                 result.setSuccess(true);
                 result.setMessage("Patient found.");
                 result.setData(this.mapPatientEntityToPatientDetail(patient));
-            }else {
+            } else {
                 result.setMessage("Patient not found.");
             }
             return ResponseEntity.ok(result);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //delete method
+    //Delete method
     public ResponseEntity<?> deletePatient(int id){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
             repository.deleteById(id);
+            result.setSuccess(true);
             result.setMessage("Deleted patient with id : " + id);
         } catch (Exception e){
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +111,7 @@ public class PatientService {
         return ResponseEntity.ok(result);
     }
 
-    //update method
+    //Update method
     public ResponseEntity<?> updatePatient(PatientEntity patient){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
@@ -132,7 +133,7 @@ public class PatientService {
                 result.setMessage("Patient not found.");
             }
             return ResponseEntity.ok(result);
-        }catch (Exception e){
+        } catch (Exception e){
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

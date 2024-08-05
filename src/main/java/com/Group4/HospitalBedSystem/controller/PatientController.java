@@ -1,7 +1,6 @@
 package com.Group4.HospitalBedSystem.controller;
 
 import com.Group4.HospitalBedSystem.entity.PatientEntity;
-import com.Group4.HospitalBedSystem.entity.UserEntity;
 import com.Group4.HospitalBedSystem.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,7 @@ public class PatientController {
         return service.savePatient(patient);
     }
 
+    //Get
     @GetMapping("/patients")
     public ResponseEntity<?> getAllPatients(){
         return service.getPatients();
@@ -33,11 +33,13 @@ public class PatientController {
         return service.getPatientByName(name);
     }
 
+    //Update
     @PutMapping("/updatePatient")
     public ResponseEntity<?> updatePatient(@RequestBody PatientEntity patient){
         return service.updatePatient(patient);
     }
 
+    //Delete
     @DeleteMapping("/deletePatient/{id}")
     public ResponseEntity<?> deletePatient(@PathVariable int id){
         return service.deletePatient(id);

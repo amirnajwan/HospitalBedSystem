@@ -149,7 +149,7 @@ public class UserService {
                     result.setMessage("Successfully update an user");
                     result.setData(existUser);
                 } else {
-                    result.setMessage("Failed to update an user");
+                    result.setMessage("Failed to update a user");
                 }
             } else {
                 result.setMessage("User not found");
