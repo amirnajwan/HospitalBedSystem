@@ -4,19 +4,19 @@ import lombok.Data;
 
 @Data
 public class BedResponse {
-    private int Id; //bed id auto generate
+    private int id; //bed id auto generate
     private String wardType; //Public/ Female / Children
     private String bedTypeId; //Eg. Fe001(Female, Unit 001)
-    private String bedTypeName; //Common / VIP
+    private String name; //Common / VIP
     private String bedStatus; //Available / Cleaning / Occupied
     private double pricePerDay; //depending on bedTypeName & wardType
 
     public int getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(int bedId) {
-        this.Id = bedId;
+    public void setBedId(int id) {
+        this.id = id;
     }
 
     public String getWardType() {
@@ -35,12 +35,12 @@ public class BedResponse {
         this.bedTypeId = bedTypeId;
     }
 
-    public String getBedTypeName() {
-        return bedTypeName;
+    public String getName() {
+        return name;
     }
 
-    public void setBedTypeName(String bedTypeName) {
-        this.bedTypeName = bedTypeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBedStatus() {

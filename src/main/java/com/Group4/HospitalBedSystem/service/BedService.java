@@ -48,14 +48,18 @@ public class BedService {
         try {
             beds = repository.findAll();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Find All" + e.getMessage());
         }
         if (beds != null){
             result.setSuccess(true);
             result.setMessage("Bed found.");
             List<BedResponse> bedList = new ArrayList<>();
-            for (BedEntity bed : beds){
-                bedList.add(mapBedEntityToBedDetail(bed));
+            try {
+                for (BedEntity bed : beds){
+                    bedList.add(mapBedEntityToBedDetail(bed));
+                }
+            } catch (Exception e){
+                System.out.println("Find mapping bed" + e.getMessage());
             }
             result.setData(bedList);
             return ResponseEntity.ok(result);
@@ -119,7 +123,7 @@ public class BedService {
             if (existBed != null){
                 existBed.setWardType(bed.getWardType());
                 existBed.setBedTypeId(bed.getBedTypeId());
-                existBed.setBedTypeName(bed.getBedTypeName());
+                existBed.setName(bed.getName());
                 existBed.setBedStatus(bed.getBedStatus());
                 existBed.setPricePerDay(bed.getPricePerDay());
                 if (repository.save(existBed) != null){
@@ -143,7 +147,7 @@ public class BedService {
         data.setId(bedEntity.getId());
         data.setWardType(bedEntity.getWardType());
         data.setBedTypeId(bedEntity.getBedTypeId());
-        data.setBedTypeName(bedEntity.getBedTypeName());
+        data.setName(bedEntity.getName());
         data.setBedStatus(bedEntity.getBedStatus());
         data.setPricePerDay(bedEntity.getPricePerDay());
         return data;
