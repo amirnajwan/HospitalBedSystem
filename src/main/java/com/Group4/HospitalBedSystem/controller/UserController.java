@@ -11,40 +11,23 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    // Post
-    // @PostMapping("/addUser")
-    // public ResponseEntity<?> addUser(@RequestBody UserEntity user){
-    //     return service.saveUser(user);
-    // }
-
-    //    @PostMapping("/login")
-    //    public ResponseEntity<?> loginUser(@RequestBody UserEntity user) {
-    //        return service.login(user.getUsername(), user.getPassword());
-    //    }
-
-
-    //    @PostMapping("/addUsers")
-    //    public List<UserEntity> addUsers(@RequestBody List<UserEntity> users){
-    //        return service.saveUsers(users);
-    //    }
-
     // Get
-    @GetMapping("/users")
+    @GetMapping("/api/v1/users")
     public ResponseEntity<?> getAllUsers(){
         return service.getUsers();
     }
 
-    @GetMapping("/userById/{id}")
+    @GetMapping("/api/v1/userById/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id){
         return service.getUserById(id);
     }
 
-    @GetMapping("/userByName/{name}")
-    public ResponseEntity<?> getUserByName(@PathVariable String name){
-        return service.getUserByName(name);
-    }
+    // @GetMapping("/userByName/{name}")
+    // public ResponseEntity<?> getUserByName(@PathVariable String name){
+    //     return service.getUserByName(name);
+    // }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/api/v1/updateUser")
     public ResponseEntity<?> updateUser(@RequestBody UserEntity user){
         return service.updateUser(user);
     }

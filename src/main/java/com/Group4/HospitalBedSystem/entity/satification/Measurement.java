@@ -28,7 +28,7 @@ public class Measurement {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Feedback> feedbacks;
+//    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Feedback> feedbacks;
 
 }

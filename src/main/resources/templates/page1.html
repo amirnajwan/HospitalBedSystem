@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" href="/css/index.css">
     <title>Page 1</title>
 </head>
 
@@ -32,11 +32,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="\js\config.js"></script>
     <script>
-        $(async function () {
+        $(document).ready(async function () {
             var urlParams = new URLSearchParams(window.location.search);
             var userId = urlParams.get('userId');
-            const url = "http://localhost:8080/userById/" + userId;
+            const url = CONFIG.BASE_URL +"/api/v1/userById/" + userId;
             var userData;
             var loginType;
             try {

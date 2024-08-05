@@ -143,7 +143,9 @@ public class UserService {
             UserEntity existUser = repository.findById(user.getId()).orElse(null);
             if (existUser != null) {
                 existUser.setName(user.getName());
-                existUser.setEmail(user.getEmail());
+                existUser.setPosition(user.getPosition());
+                existUser.setDepartment(user.getDepartment());
+                existUser.setPhoneNumber(user.getPhoneNumber());
                 if (repository.save(existUser) != null) {
                     result.setSuccess(true);
                     result.setMessage("Successfully update an user");

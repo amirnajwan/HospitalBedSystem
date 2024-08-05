@@ -68,6 +68,8 @@
     </div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="\js\config.js"></script> 
+    <!-- CONFIG.BASE_URL -->
     <script>
         $(document).ready(function () {
             // not sure if have another way to get params
@@ -108,7 +110,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:8080/api/v1/register',
+                    url: CONFIG.BASE_URL + '/api/v1/register',
                     contentType: 'application/json',
                     data: JSON.stringify(userData),
                     success: function (response) {
@@ -117,14 +119,16 @@
                             if (fromValue == "addUser") {
                                 // window.location.href = '/login'; // Redirect to users page
                             } else {
-                                window.location.href = '/login'; // Redirect to login page
+                                window.location.href = '/'; // Redirect to login page
                             }
                         } else {
-                            alert('Registeration failed: ' + response.message);
+                            console.log('Registeration failed: ' + response.message)
+                            alert('Registeration failed. Please try again');
                         }
                     },
                     error: function (error) {
-                        alert('Error register user : ' + JSON.stringify(error));
+                        console.log('Error register user : ' + JSON.stringify(error));
+                        alert('Error register user : Username or email already used');
                     }
                 });
             });

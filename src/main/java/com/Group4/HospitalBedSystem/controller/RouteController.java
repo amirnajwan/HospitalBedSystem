@@ -19,8 +19,16 @@ public class RouteController {
     public String index() {
         return "index";
     }
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+    @GetMapping("/users")
+    public String users() {
+        return "users";
+    }
     @GetMapping("/page1") // sambung disini
-    public String home() {
+    public String page1() {
         return "page1";
     }
 

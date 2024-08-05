@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- boleh jadikan contoh -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Profile</title>
+</head>
+
+<body>
+    <!-- Header container -->
+    <div id="header-container"></div>
+
+    <div id="wrapper">
+        <!-- Sidebar container -->
+        <div id="sidebar-container"></div>
+
+        <!-- Page content -->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>View & Edit Profile</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="form-group">
+                                    <label for="name">Username</label>
+                                    <input type="text" class="form-control" id="username" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Position</label>
+                                    <input type="text" class="form-control" id="position" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Department</label>
+                                    <input type="text" class="form-control" id="department" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Phone Number</label>
+                                    <input type="number" class="form-control" id="phoneNumber" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Role</label>
+                                    <input type="text" class="form-control" id="role" readonly>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block" id="saveProfile">Update Profile</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer container -->
+    <div id="footer-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="\js\config.js"></script> 
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var userId = urlParams.get('userId');
+
+        $(document).ready( async function () {
+            const url = CONFIG.BASE_URL+"/api/v1/userById/" + userId;
+            var userData;
+            var loginType;
+            try {
+                userData = await fetchData(url);
+                console.log(userData);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+            if (userData.success == true) {
+                loginType = userData.data.admin == true ? "ADMIN" : "DOCTOR";
+            }
+            $("#header-container").load("header");
+            $("#sidebar-container").load("sidebar", function () {
+                // Dynamically set sidebar heading from URL
+                $("#sidebar-heading").text(loginType + " VIEW");
+            });
+            $("#footer-container").load("footer");
+
+            // set default value
+            $('#username').val(userData.data.username);
+            $('#email').val(userData.data.email);
+            $('#name').val(userData.data.name);
+            $('#position').val(userData.data.position);
+            $('#department').val(userData.data.department);
+            $('#phoneNumber').val(userData.data.phoneNumber);
+            $('#role').val(userData.data.admin == true ? "ADMIN" : "DOCTOR");
+        });
+
+        async function fetchData(url) {
+            return $.ajax({
+                url: url,
+                type: 'GET'
+            });
+        }
+
+        $('#profileForm').on('submit', function () {
+            event.preventDefault();
+
+            var username = $('#username').val();
+            var email = $('#email').val();
+            var name = $('#name').val();
+            var position = $('#position').val();
+            var name = $('#name').val();
+            var department = $('#department').val();
+            var phoneNumber = $('#phoneNumber').val();
+
+            var userData = {
+                id: userId,
+                name: name,
+                position: position,
+                department: department,
+                phoneNumber: phoneNumber,
+            };
+
+            console.log(JSON.stringify(userData));
+
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:8080/api/v1/updateUser',
+                contentType: 'application/json',
+                data: JSON.stringify(userData),
+                success: function (response) {
+                    if (response.success == true) {
+                        alert('Profile saved successfully!');
+                    } else {
+                        console.log('Process failed: ' + response.message)
+                        alert('Process failed. Please try again');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error update user : ' + JSON.stringify(error));
+                    alert('Error!');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
