@@ -3,6 +3,7 @@ package com.Group4.HospitalBedSystem.service;
 import com.Group4.HospitalBedSystem.dto.response.LoginResponse;
 import com.Group4.HospitalBedSystem.dto.response.UserResponse;
 import com.Group4.HospitalBedSystem.entity.UserEntity;
+import com.Group4.HospitalBedSystem.entity.generator.EmployeeIdGenerator;
 import com.Group4.HospitalBedSystem.repository.UserRepository;
 import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,16 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private EmployeeIdGenerator employeeIdGenerator;
 
     // Post methods
-    public ResponseEntity<?> saveUser(UserEntity user){
+    public ResponseEntity<?> saveUser(UserEntity user) {
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
+        try {
             if (user != null) {
+                String newEmployeeId = employeeIdGenerator.generateNewEmployeeId();
+                user.setEmployeeId(newEmployeeId);
                 if (repository.save(user) != null) {
                     result.setSuccess(true);
                     result.setMessage("Added new user");
@@ -37,50 +42,21 @@ public class UserService {
                 result.setMessage("Failed to add user");
                 return new ResponseEntity<>(result, HttpStatus.OK);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             result.setMessage("Failed to add user : " + e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
 
-//    public List<UserEntity> saveUsers(List<UserEntity> users){
-//        return repository.saveAll(users);
-//    }
-//
-//    public ResponseEntity<?> saveUsers(List<UserEntity> users){
-//        SuccessAndDataResponse result = new SuccessAndDataResponse();
-//        try{
-//            if (users != null) {
-//                List<UserEntity> usersEntity = new ArrayList<>();
-//                for (UserEntity userList : users){
-//
-//                }
-//                if (repository.save(user) != null) {
-//                    result.setSuccess(true);
-//                    result.setMessage("Added new user");
-//                    result.setData(user);
-//                } else {
-//                    result.setMessage("Failed to add user");
-//                }
-//                result.setData(user);
-//                return ResponseEntity.ok(result);
-//            } else {
-//                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-//            }
-//        }catch (Exception e){
-//            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     // Get methods
-    public ResponseEntity<?> getUsers(){ // get list of objects
+    public ResponseEntity<?> getUsers() { // get list of objects
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         List<UserEntity> users = repository.findAll();
         if (users != null) {
             result.setSuccess(true);
             result.setMessage("Users found");
             List<UserResponse> userList = new ArrayList<>();
-            for(UserEntity user : users){
+            for (UserEntity user : users) {
                 userList.add(mapUserEntityToUserDetail(user));
             }
             result.setData(userList);
@@ -90,11 +66,11 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> getUserById(int id){ // get 1 object
+    public ResponseEntity<?> getUserById(int id) { // get 1 object
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
+        try {
             UserEntity user = repository.findById(id).orElse(null);
-            if (user != null){
+            if (user != null) {
                 result.setSuccess(true);
                 result.setMessage("User found.");
                 result.setData(this.mapUserEntityToUserDetail(user));
@@ -107,39 +83,56 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> getUserByName(String name){
+    public ResponseEntity<?> getUserByEmployeeId(String employeeId) { // get 1 object
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
-            UserEntity user = repository.findUserByName(name);
-            if (user != null){
+        try {
+            UserEntity user = repository.findUserByEmployeeId(employeeId);
+            if (user != null) {
                 result.setSuccess(true);
                 result.setMessage("User found.");
                 result.setData(this.mapUserEntityToUserDetail(user));
             } else {
                 result.setMessage("User not found.");
             }
-            return  ResponseEntity.ok(result);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> getUserByName(String name) {
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try {
+            UserEntity user = repository.findUserByName(name);
+            if (user != null) {
+                result.setSuccess(true);
+                result.setMessage("User found.");
+                result.setData(this.mapUserEntityToUserDetail(user));
+            } else {
+                result.setMessage("User not found.");
+            }
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // delete method
-    public ResponseEntity<?> deleteUser(int id){
+    public ResponseEntity<?> deleteUser(int id) {
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
+        try {
             repository.deleteById(id);
             result.setMessage("Deleted user with id : " + id);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(result);
     }
 
     // update method
-    public ResponseEntity<?> updateUser(UserEntity user){
+    public ResponseEntity<?> updateUser(UserEntity user) {
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
+        try {
             UserEntity existUser = repository.findById(user.getId()).orElse(null);
             if (existUser != null) {
                 existUser.setName(user.getName());
@@ -157,14 +150,15 @@ public class UserService {
                 result.setMessage("User not found");
             }
             return ResponseEntity.ok(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public UserResponse mapUserEntityToUserDetail(UserEntity userEntity){
+    public UserResponse mapUserEntityToUserDetail(UserEntity userEntity) {
         UserResponse data = new UserResponse();
         data.setId(userEntity.getId());
+        data.setEmployeeId(userEntity.getEmployeeId());
         data.setName(userEntity.getName());
         data.setUsername(userEntity.getUsername());
         data.setEmail(userEntity.getEmail());
@@ -178,15 +172,16 @@ public class UserService {
         return data;
     }
 
-    public ResponseEntity<?> login(String username, String password){
-//        UserEntity user = repository.findUsernameAndPassword(username, password);
-//        return user;
+    public ResponseEntity<?> login(String username, String password) {
+        // UserEntity user = repository.findUsernameAndPassword(username, password);
+        // return user;
         LoginResponse data = new LoginResponse();
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        try{
+        try {
             UserEntity user = repository.findUserByUsername(username);
             if (user != null && user.getPassword().equals(password)) {
                 data.setUserId(user.getId());
+                data.setEmployeeId(user.getEmployeeId());
                 data.setName(user.getName());
                 data.setRole(user.isAdmin() == true ? "ADMIN" : "DOCTOR");
                 data.setLoginSuccess(true);
@@ -201,7 +196,7 @@ public class UserService {
                 result.setMessage("Invalid username or password");
                 return new ResponseEntity<>(result, HttpStatus.OK);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             result.setMessage(e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }

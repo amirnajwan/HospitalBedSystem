@@ -22,10 +22,10 @@ public class UserController {
         return service.getUserById(id);
     }
 
-    // @GetMapping("/userByName/{name}")
-    // public ResponseEntity<?> getUserByName(@PathVariable String name){
-    //     return service.getUserByName(name);
-    // }
+    @GetMapping("/api/v1/userByEmployeeId/{employeeId}")
+    public ResponseEntity<?> getUserByEmmployeId(@PathVariable String employeeId){
+        return service.getUserByEmployeeId(employeeId);
+    }
 
     @PutMapping("/api/v1/updateUser")
     public ResponseEntity<?> updateUser(@RequestBody UserEntity user){

@@ -31,12 +31,12 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="\js\config.js"></script> 
+<!-- <script src="\js\config.js"></script>  -->
 <script>
     $(document).ready(async function () {
         var urlParams = new URLSearchParams(window.location.search);
-        var userId = urlParams.get('userId');
-        const url = CONFIG.BASE_URL + "api/v1/userById/" + userId;
+        var employeeId = urlParams.get('employeeId');
+        const url = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
         var userData;
         try {
             userData = await fetchData(url);
@@ -47,7 +47,7 @@
 
         $('.list-group a').each(function () {
             var currentHref = $(this).attr('href');
-            $(this).attr('href', currentHref + '?userId=' + userId);
+            $(this).attr('href', currentHref + '?employeeId=' + employeeId);
         });
         if (userData.data.doctor == true) {
             $('#usersLink').hide();

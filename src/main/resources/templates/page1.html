@@ -36,8 +36,8 @@
     <script>
         $(document).ready(async function () {
             var urlParams = new URLSearchParams(window.location.search);
-            var userId = urlParams.get('userId');
-            const url = CONFIG.BASE_URL +"/api/v1/userById/" + userId;
+            var employeeId = urlParams.get('employeeId');
+            const url = CONFIG.BASE_URL +"/api/v1/userByEmployeeId/" + employeeId;
             var userData;
             var loginType;
             try {

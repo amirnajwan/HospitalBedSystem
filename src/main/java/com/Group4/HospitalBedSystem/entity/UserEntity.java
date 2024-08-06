@@ -15,6 +15,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String employeeId;
     private String username;
     private String password;
     private String name;
@@ -31,6 +32,14 @@ public class UserEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getUsername() {
@@ -93,15 +102,15 @@ public class UserEntity {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public boolean isDoctor() {
         return isDoctor;
     }
 
-    public void setDoctor(boolean isDoctor) {
-        this.isDoctor = isDoctor;
+    public void setDoctor(boolean doctor) {
+        isDoctor = doctor;
     }
 }

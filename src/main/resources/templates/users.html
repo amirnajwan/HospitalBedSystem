@@ -11,14 +11,18 @@
     <style>
         /* Custom CSS for table styling */
         .table thead th {
-          background-color: #f8f9fa; /* Light grey background for header */
-          color: #343a40; /* Dark text color for contrast */
-          font-weight: bold;
+            background-color: #f8f9fa;
+            /* Light grey background for header */
+            color: #343a40;
+            /* Dark text color for contrast */
+            font-weight: bold;
         }
+
         .table tbody tr:hover {
-          background-color: #f1f1f1; /* Light grey background on hover */
+            background-color: #f1f1f1;
+            /* Light grey background on hover */
         }
-      </style>
+    </style>
 </head>
 
 <body>
@@ -31,24 +35,28 @@
 
         <!-- Page content -->
         <div class="container mt-5">
-            <h2>List of Users</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Department</th>
-                        <th>Phone Number</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <!-- Data will be populated here -->
-                </tbody>
-            </table>
+            <div class="row justify-content-center">
+                <div class="col-md-12 offset-md-3">
+                    <h2>List of Users</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Department</th>
+                                <th>Phone Number</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -62,8 +70,8 @@
     <script>
         $(document).ready(async function () {
             var urlParams = new URLSearchParams(window.location.search);
-            var userId = urlParams.get('userId');
-            const url = CONFIG.BASE_URL + "/api/v1/userById/" + userId;
+            var employeeId = urlParams.get('employeeId');
+            const url = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
             var userData;
             var usersData;
             var loginType;

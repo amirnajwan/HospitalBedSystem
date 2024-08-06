@@ -85,7 +85,7 @@
                             alert('Login success: ' + response.message);
                             // Prepare parameters
                             const params = new URLSearchParams({
-                                userId: response.data.userId,
+                                employeeId: response.data.employeeId,
                             }).toString();
                             // Redirect to index page with parameters
                             window.location.href = '/index?' + params;

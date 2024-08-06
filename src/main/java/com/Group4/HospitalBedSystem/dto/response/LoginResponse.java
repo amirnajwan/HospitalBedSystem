@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LoginResponse {
     private int userId;
+    private String employeeId;
     private String name;
     private String role;
     private boolean loginSuccess;
@@ -12,8 +13,9 @@ public class LoginResponse {
     public LoginResponse() {
     }
 
-    public LoginResponse(int userId, String name, String role, boolean loginSuccess) {
+    public LoginResponse(int userId, String name, String employeeId, String role, boolean loginSuccess) {
         this.userId = userId;
+        this.employeeId = employeeId;
         this.name = name;
         this.role = role;
         this.loginSuccess = loginSuccess;
@@ -25,6 +27,14 @@ public class LoginResponse {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {

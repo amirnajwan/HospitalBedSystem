@@ -20,7 +20,7 @@
 
         <!-- Page content -->
         <div class="container mt-5">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-md-6 offset-md-3">
                     <div class="card">
                         <div class="card-header">
@@ -31,6 +31,7 @@
                                 <div class="form-group">
                                     <label for="name">Username</label>
                                     <input type="text" class="form-control" id="username" readonly>
+                                    <input type="text" class="form-control" id="userId" hidden>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
@@ -75,10 +76,9 @@
     <script src="\js\config.js"></script> 
     <script>
         var urlParams = new URLSearchParams(window.location.search);
-        var userId = urlParams.get('userId');
-
+        var employeeId = urlParams.get('employeeId');
         $(document).ready( async function () {
-            const url = CONFIG.BASE_URL+"/api/v1/userById/" + userId;
+            const url = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
             var userData;
             var loginType;
             try {
@@ -98,6 +98,7 @@
             $("#footer-container").load("footer");
 
             // set default value
+            $('#userId').val(userData.data.id);
             $('#username').val(userData.data.username);
             $('#email').val(userData.data.email);
             $('#name').val(userData.data.name);
@@ -117,6 +118,7 @@
         $('#profileForm').on('submit', function () {
             event.preventDefault();
 
+            var userId = $('#userId').val();
             var username = $('#username').val();
             var email = $('#email').val();
             var name = $('#name').val();

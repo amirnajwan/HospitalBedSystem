@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UserResponse {
     private int id;
+    private String employeeId;
     private String name;
     private String email;
     private String username;
@@ -21,6 +22,14 @@ public class UserResponse {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
