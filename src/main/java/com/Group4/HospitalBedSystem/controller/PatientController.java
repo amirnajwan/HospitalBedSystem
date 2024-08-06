@@ -12,35 +12,35 @@ public class PatientController {
     private PatientService service;
 
     // Post
-    @PostMapping("/addPatient")
+    @PostMapping("/api/v1/registerPatient")
     public ResponseEntity<?> addPatient(@RequestBody PatientEntity patient) {
         return service.savePatient(patient);
     }
 
     //Get
-    @GetMapping("/patients")
+    @GetMapping("/api/v1/patients")
     public ResponseEntity<?> getAllPatients(){
         return service.getPatients();
     }
 
-    @GetMapping("/patientById/{id}")
+    @GetMapping("/api/v1/patientById/{id}")
     public ResponseEntity<?> getPatientById(@PathVariable int id){
         return service.getPatientById(id);
     }
 
-    @GetMapping("/patientByName/{name}")
+    @GetMapping("/api/v1/patientByName/{name}")
     public ResponseEntity<?> getPatientByName(@PathVariable String name){
         return service.getPatientByName(name);
     }
 
-    //Update
-    @PutMapping("/updatePatient")
-    public ResponseEntity<?> updatePatient(@RequestBody PatientEntity patient){
-        return service.updatePatient(patient);
+    //updatePatientDischargeDate
+    @PutMapping("/api/v1/updatePatientDischargeDate")
+    public ResponseEntity<?> updatePatientDischargeDate(@RequestBody PatientEntity patient){
+        return service.updatePatientDischargeDate(patient);
     }
 
     //Delete
-    @DeleteMapping("/deletePatient/{id}")
+    @DeleteMapping("/api/v1/deletePatient/{id}")
     public ResponseEntity<?> deletePatient(@PathVariable int id){
         return service.deletePatient(id);
     }

@@ -27,6 +27,14 @@ public class RouteController {
     public String users() {
         return "users";
     }
+    @GetMapping("/registerPatient")
+    public String registerPatient() {
+        return "patient/registerPatient";
+    }
+    @GetMapping("/patients")
+    public String patients() {
+        return "patient/patients";
+    }
     @GetMapping("/page1") // sambung disini
     public String page1() {
         return "page1";

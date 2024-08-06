@@ -16,13 +16,15 @@ public class PatientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String patient_id;
+    private String patientId;
     private String name;
     private int age;
     private String gender;
-    private String marital_status;
-    private String employment_status;
+    private String maritalStatus;
+    private String employmentStatus;
     private String sector;
+    private String admissionDate;
+    private String dischargeDate;
 
     public int getId() {
         return id;
@@ -32,12 +34,12 @@ public class PatientEntity {
         this.id = id;
     }
 
-    public String getPatient_id() {
-        return patient_id;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setPatient_id(String patient_id) {
-        this.patient_id = patient_id;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getName() {
@@ -64,20 +66,20 @@ public class PatientEntity {
         this.gender = gender;
     }
 
-    public String getMarital_status() {
-        return marital_status;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMarital_status(String marital_status) {
-        this.marital_status = marital_status;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
-    public String getEmployment_status() {
-        return employment_status;
+    public String getEmploymentStatus() {
+        return employmentStatus;
     }
 
-    public void setEmployment_status(String employment_status) {
-        this.employment_status = employment_status;
+    public void setEmploymentStatus(String employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
     public String getSector() {
@@ -86,5 +88,21 @@ public class PatientEntity {
 
     public void setSector(String sector) {
         this.sector = sector;
+    }
+
+    public String getAdmissionDate() {
+        return admissionDate;
+    }
+
+    public void setAdmissionDate(String admissionDate) {
+        this.admissionDate = admissionDate;
+    }
+
+    public String getDischargeDate() {
+        return dischargeDate;
+    }
+
+    public void setDischargeDate(String dischargeDate) {
+        this.dischargeDate = dischargeDate;
     }
 }
