@@ -4,9 +4,8 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class CategoryDTO {
-    private Long id;
+public class CategoryResponse {
+    private int id;
     private String name;
-    private List<MeasurementDTO> measurements;
-
+    private List<MeasurementResponse> measurements;
 }

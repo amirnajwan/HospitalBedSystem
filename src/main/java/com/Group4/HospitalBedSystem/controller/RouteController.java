@@ -1,10 +1,7 @@
 package com.Group4.HospitalBedSystem.controller;
 
-import com.Group4.HospitalBedSystem.entity.satification.Category;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -41,23 +38,10 @@ public class RouteController {
     }
 
     //patients satisfaction routing pages
-    @GetMapping("/category")
-    public String viewCategoriesManagement() {return "redirect:/categories";}
-    @GetMapping("/measurement")
-    public String viewMeasurementsManagement() {return "redirect:/measurements";}
-
-//
-//    @GetMapping("/addcategory")
-//    public String addSatisfactionCategory() {return "feedback/add-category";}
-//    @GetMapping("/addmeasurement")
-//    public String addSatisfactionMeasurement() {return "feedback/add-measurement";}
-//    @GetMapping("/patientsatisfactionform")
-//    public String showSatisfactionForm() {return "feedback/submit-satisfaction-form";}
-//    @PostMapping("/successsubmitsatisfactionform")
-//    public String submitSatisfactionForm() {return "feedback/success-submit-satisfaction";}
-//    @GetMapping("/viewsatisfactionreport")
-//    public String viewSatisfactionReport() {return "feedback/view-satisfaction-report";}
-
+    @GetMapping("/categories")
+    public String viewCategoriesManagement() {return "/feedback/category/categories";}
+    @GetMapping("/categories/add")
+    public String addCategoriesManagement() {return "/feedback/category/add-category";}
     //end patients satisfaction pages
 
     @GetMapping("/register")

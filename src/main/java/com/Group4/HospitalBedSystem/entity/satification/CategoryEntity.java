@@ -10,19 +10,33 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "categories")
-public class Category {
+public class CategoryEntity {
     @Setter
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Setter
     @Getter
     @NonNull
     private String name;
 
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Measurement> measurements;
+    private Set<MeasurementEntity> measurements;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

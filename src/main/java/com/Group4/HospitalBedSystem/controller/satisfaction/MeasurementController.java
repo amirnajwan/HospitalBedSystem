@@ -19,48 +19,48 @@ public class MeasurementController {
 
     @GetMapping
     public String getAllMeasurements(Model model) {
-        List<Measurement> measurements = measurementService.getAllMeasurements();
+        List<MeasurementEntity> measurements = measurementService.getAllMeasurements();
         model.addAttribute("measurements", measurements);
         return "/feedback/measurement/measurements";
     }
 
     @GetMapping("/add")
     public String addMeasurementForm(Model model) {
-        model.addAttribute("measurement", new Measurement());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("measurement", new MeasurementEntity());
+        //model.addAttribute("categories", categoryService.getAllCategories());
         return "/feedback/measurement/add-measurement";
     }
 
     @PostMapping
-    public String addMeasurement(@ModelAttribute Measurement measurement) {
+    public String addMeasurement(@ModelAttribute MeasurementEntity measurement) {
         measurementService.saveMeasurement(measurement);
         return "redirect:/measurements";
     }
 
     @GetMapping("/edit/{id}")
-    public String editMeasurementForm(@PathVariable Long id, Model model) {
-        Measurement measurement = measurementService.getMeasurementById(id);
+    public String editMeasurementForm(@PathVariable int id, Model model) {
+        MeasurementEntity measurement = measurementService.getMeasurementById(id);
         model.addAttribute("measurement", measurement);
-        model.addAttribute("categories", categoryService.getAllCategories());
+       // model.addAttribute("categories", categoryService.getAllCategories());
         return "/feedback/measurement/edit-measurement";
     }
 
     @PostMapping("/edit/{id}")
-    public String editMeasurement(@PathVariable Long id, @ModelAttribute Measurement measurement) {
+    public String editMeasurement(@PathVariable int id, @ModelAttribute MeasurementEntity measurement) {
         measurement.setId(id);
         measurementService.saveMeasurement(measurement);
         return "redirect:/measurements";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteMeasurement(@PathVariable Long id) {
+    public String deleteMeasurement(@PathVariable int id) {
         measurementService.deleteMeasurement(id);
         return "redirect:/measurements";
     }
 
     @GetMapping("/measurements/byCategory/{categoryId}")
     @ResponseBody
-    public List<Measurement> getMeasurementsByCategory(@PathVariable Long categoryId) {
+    public List<MeasurementEntity> getMeasurementsByCategory(@PathVariable int categoryId) {
         return measurementService.getMeasurementsByCategory(categoryId);
     }
 

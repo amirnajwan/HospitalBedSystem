@@ -1,57 +1,33 @@
 package com.Group4.HospitalBedSystem.controller.satisfaction;
 
+import com.Group4.HospitalBedSystem.entity.PatientEntity;
 import com.Group4.HospitalBedSystem.entity.satification.*;
 import com.Group4.HospitalBedSystem.service.satisfaction.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
+
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Controller
-@RequestMapping("/categories")
+@RestController
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping
-    public String getAllCategories(Model model) {
-        List<Category> categories = categoryService.getAllCategories();
-        model.addAttribute("categories", categories);
-        return "/feedback/category/categories";
+    @GetMapping ("/api/v1/categories")
+    public ResponseEntity<?> getAllCategories() {return categoryService.getCategories();}
+
+    @PostMapping ("/api/v1/addCategory")
+    public ResponseEntity<?> addCategories(@RequestBody CategoryEntity categoryEntity) {return categoryService.saveCategory(categoryEntity);}
+
+    @PutMapping("/api/v1/updateCategory/{id}")
+    public ResponseEntity<?> updateCategory(@PathVariable int id, @RequestBody CategoryEntity categoryEntity) {
+        categoryEntity.setId(id); // Ensure the entity has the correct ID
+        return categoryService.updateCategories(categoryEntity);
+    }
+    @DeleteMapping ("/api/v1/deleteCategory/{id}")
+    public ResponseEntity<?> deleteCategories(@PathVariable int id){
+        return categoryService.deleteCategory(id);
     }
 
-
-    @GetMapping("/add")
-    public String addCategoryForm(Model model) {
-        model.addAttribute("category", new Category());
-        return "/feedback/category/add-category";
-    }
-
-    @PostMapping
-    public String addCategory(@ModelAttribute Category category) {
-        categoryService.saveCategory(category);
-        return "redirect:/categories";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editCategoryForm(@PathVariable Long id, Model model) {
-        Category category = categoryService.getCategoryById(id);
-        model.addAttribute("category", category);
-        return "/feedback/category/edit-category";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String editCategory(@PathVariable Long id, @ModelAttribute Category category) {
-        category.setId(id);
-        categoryService.saveCategory(category);
-        return "redirect:/categories";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return "redirect:/categories";
-    }
 }

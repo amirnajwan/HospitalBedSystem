@@ -3,20 +3,17 @@ package com.Group4.HospitalBedSystem.entity.satification;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "measurements")
-public class Measurement {
+public class MeasurementEntity {
     @Setter
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Setter
     @Getter
@@ -24,9 +21,12 @@ public class Measurement {
     private String name;
     //private int rating; // values 1 to 5
 
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private CategoryEntity category;
+
 
 //    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Feedback> feedbacks;
