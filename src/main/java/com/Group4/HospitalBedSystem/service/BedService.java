@@ -44,26 +44,21 @@ public class BedService {
     //Get methods
     public ResponseEntity<?> getBeds(){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
-        List<BedEntity> beds = new ArrayList<>();
+        List<BedEntity> beds = repository.findAll();
         try {
-            beds = repository.findAll();
-        } catch (Exception e) {
-            System.out.println("Find All" + e.getMessage());
-        }
-        if (beds != null){
-            result.setSuccess(true);
-            result.setMessage("Bed found.");
-            List<BedResponse> bedList = new ArrayList<>();
-            try {
+            if (beds != null){
+                result.setSuccess(true);
+                result.setMessage("Bed found.");
+                List<BedResponse> bedList = new ArrayList<>();
                 for (BedEntity bed : beds){
                     bedList.add(mapBedEntityToBedDetail(bed));
                 }
-            } catch (Exception e){
-                System.out.println("Find mapping bed" + e.getMessage());
+                result.setData(bedList);
+            } else {
+                result.setMessage("Bed not found.");
             }
-            result.setData(bedList);
             return ResponseEntity.ok(result);
-        } else {
+        } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -25,7 +25,7 @@ public class BedEntity {
         return id;
     }
 
-    public void setBedId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
