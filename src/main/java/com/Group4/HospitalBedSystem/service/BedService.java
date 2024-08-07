@@ -2,6 +2,7 @@ package com.Group4.HospitalBedSystem.service;
 
 import com.Group4.HospitalBedSystem.dto.response.BedResponse;
 import com.Group4.HospitalBedSystem.entity.BedEntity;
+import com.Group4.HospitalBedSystem.entity.generator.BedIdgenerator;
 import com.Group4.HospitalBedSystem.repository.BedRepository;
 import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,16 @@ import java.util.List;
 public class BedService {
     @Autowired
     private BedRepository repository;
+    @Autowired
+    private BedIdgenerator bedIdgenerator;
 
     //Post method
     public ResponseEntity<?> saveBed(BedEntity bed){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
             if (bed != null) {
+                String newBedId = bedIdgenerator.generateNewBedId();
+                bed.setBedTypeId(newBedId);
                 if (repository.save(bed) != null) {
                     result.setSuccess(true);
                     result.setMessage("Added new bed.");
@@ -59,6 +64,23 @@ public class BedService {
             }
             return ResponseEntity.ok(result);
         } catch (Exception e) {
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> getBedByBedTypeId(String bedTypeId){
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try {
+            BedEntity bed = repository.findBedByBedTypeId(bedTypeId);
+            if (bed != null){
+                result.setSuccess(true);
+                result.setMessage("Bed found.");
+                result.setData(this.mapBedEntityToBedDetail(bed));
+            } else {
+                result.setMessage("Bed not found.");
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e){
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

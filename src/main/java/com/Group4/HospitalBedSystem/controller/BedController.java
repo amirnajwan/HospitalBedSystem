@@ -12,35 +12,40 @@ public class BedController {
     private BedService service;
 
     //Post
-    @PostMapping("/addBed")
+    @PostMapping("/api/v1/registerBed")
     public ResponseEntity<?> addBed(@RequestBody BedEntity bed) {
         return service.saveBed(bed);
     }
 
     //Get
-    @GetMapping("/beds")
+    @GetMapping("/api/v1/beds")
     public ResponseEntity<?> getAllBeds(){
         return service.getBeds();
     }
 
-    @GetMapping("/bedById/{id}")
+    @GetMapping("/api/v1/bedByBedTypeId/{bedTypeId}")
+    public ResponseEntity<?> getBedByBedTypesId(@PathVariable String bedTypeId){
+        return service.getBedByBedTypeId(bedTypeId);
+    }
+
+    @GetMapping("/api/v1/bedById/{id}")
     public ResponseEntity<?> getBedById(@PathVariable int id){
         return service.getBedById(id);
     }
 
-    @GetMapping("/bedByName/{name}")
+    @GetMapping("/api/v1/bedByName/{name}")
     public ResponseEntity<?> getBedByName(@PathVariable String name){
         return service.getBedByName(name);
     }
 
     //Update
-    @PutMapping("/updateBed")
+    @PutMapping("/api/v1/updateBed")
     public ResponseEntity<?> updateBed(@RequestBody BedEntity bed){
         return service.updateBed(bed);
     }
 
     //Delete
-    @DeleteMapping("/deleteBed/{id}")
+    @DeleteMapping("/api/v1/deleteBed/{id}")
     public ResponseEntity<?> deleteBed(@PathVariable int id){
         return service.deleteBed(id);
     }

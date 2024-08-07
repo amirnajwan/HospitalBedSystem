@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BedRepository extends JpaRepository<BedEntity, Integer> {
     BedEntity findBedByName(String name);
+    BedEntity findBedByBedTypeId(String bedTypeId);
 }
