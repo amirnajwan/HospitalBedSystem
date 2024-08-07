@@ -23,6 +23,7 @@ public class PatientEntity {
     private String maritalStatus;
     private String employmentStatus;
     private String sector;
+    private String registerDate;
     private String admissionDate;
     private String dischargeDate;
 
@@ -88,6 +89,14 @@ public class PatientEntity {
 
     public void setSector(String sector) {
         this.sector = sector;
+    }
+
+    public String getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(String registerDate) {
+        this.registerDate = registerDate;
     }
 
     public String getAdmissionDate() {

@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Bootstrap Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="/css/index.css">
     <title>Register Patient</title>
 </head>
@@ -44,13 +45,15 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="gender" value="Male" required>
+                                                <input class="form-check-input" type="radio" name="gender" value="Male"
+                                                    required>
                                                 <label class="form-check-label">Male</label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="gender" value="Female" required>
+                                                <input class="form-check-input" type="radio" name="gender"
+                                                    value="Female" required>
                                                 <label class="form-check-label">Female</label>
                                             </div>
                                         </div>
@@ -62,19 +65,22 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="maritalStatus" value="Single" required>
+                                                <input class="form-check-input" type="radio" name="maritalStatus"
+                                                    value="Single" required>
                                                 <label class="form-check-label">Single</label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="maritalStatus" value="Married" required>
+                                                <input class="form-check-input" type="radio" name="maritalStatus"
+                                                    value="Married" required>
                                                 <label class="form-check-label">Married</label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="maritalStatus" value="Divorced" required>
+                                                <input class="form-check-input" type="radio" name="maritalStatus"
+                                                    value="Divorced" required>
                                                 <label class="form-check-label">Divorced</label>
                                             </div>
                                         </div>
@@ -86,14 +92,23 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="employmentStatus" value="Employed" required>
+                                                <input class="form-check-input" type="radio" name="employmentStatus"
+                                                    value="Employed" required>
                                                 <label class="form-check-label">Employed</label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="employmentStatus" value="Unemployed" required>
+                                                <input class="form-check-input" type="radio" name="employmentStatus"
+                                                    value="Unemployed" required>
                                                 <label class="form-check-label">Unemployed</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="employmentStatus"
+                                                    value="Retired" required>
+                                                <label class="form-check-label">Retired</label>
                                             </div>
                                         </div>
                                     </div>
@@ -102,23 +117,14 @@
                                     <label for="sector">Select Working Sector (If employed):</label>
                                     <select class="form-control" id="sector" name="sector">
                                         <option value="">Select a sector</option>
-                                        <option value="IT">IT</option>
-                                        <option value="Healthcare">Healthcare</option>
-                                        <option value="Finance">Finance</option>
-                                        <option value="Education">Education</option>
-                                        <option value="Construction">Construction</option>
-                                        <option value="Retail">Retail</option>
-                                        <option value="Hospitality">Hospitality</option>
-                                        <option value="Manufacturing">Manufacturing</option>
-                                        <option value="Transport">Transport</option>
-                                        <option value="Public Sector">Public Sector</option>
-                                        <option value="Other">Other</option>
+                                        <option value="Goverment">Government</option>
+                                        <option value="Private">Private</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="date">Select Date:</label>
                                     <input type="text" class="form-control" id="date" placeholder="YYYY-MM-DD">
-                                </div>
+                                </div> -->
 
                                 <button type="submit" class="btn btn-primary btn-block">Register Patient</button>
                             </form>
@@ -136,12 +142,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="\js\config.js"></script> 
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="\js\config.js"></script>
     <script>
         var urlParams = new URLSearchParams(window.location.search);
         var employeeId = urlParams.get('employeeId');
-        $(document).ready( async function () {
+        $(document).ready(async function () {
             const url = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
             var userData;
             var loginType;
@@ -186,7 +193,8 @@
             var maritalStatus = $('input[name="maritalStatus"]:checked').val();
             var employmentStatus = $('input[name="employmentStatus"]:checked').val();
             var sector = $('#sector').val();
-            var admissionDate = $('#date').val();
+            var d = new Date();
+            var registerDate =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 
             var patientData = {
                 name: name,
@@ -195,14 +203,14 @@
                 maritalStatus: maritalStatus,
                 employmentStatus: employmentStatus,
                 sector: sector,
-                admissionDate: admissionDate
+                registerDate: registerDate
             };
 
             console.log(JSON.stringify(patientData));
 
             $.ajax({
                 type: 'POST',
-                url:  CONFIG.BASE_URL + '/api/v1/registerPatient',
+                url: CONFIG.BASE_URL + '/api/v1/registerPatient',
                 contentType: 'application/json',
                 data: JSON.stringify(patientData),
                 success: function (response) {

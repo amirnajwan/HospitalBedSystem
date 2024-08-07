@@ -50,6 +50,7 @@
                                     <th>Marital Status</th>
                                     <th>Employment Status</th>
                                     <th>Sector</th>
+                                    <th>Register Date</th>
                                     <th>Admission Date</th>
                                     <th>Discharge Date</th>
                                 </tr>
@@ -114,7 +115,8 @@
                 row.append('<td>' + patient.maritalStatus + '</td>');
                 row.append('<td>' + patient.employmentStatus + '</td>');
                 row.append('<td>' + patient.sector + '</td>');
-                row.append('<td>' + patient.admissionDate + '</td>');
+                row.append('<td>' + patient.registerDate + '</td>');
+                row.append('<td>' + (patient.admissionDate ?? '-') + '</td>');
                 row.append('<td>' + (patient.dischargeDate ?? '-') + '</td>');
                 tableBody.append(row);
             });

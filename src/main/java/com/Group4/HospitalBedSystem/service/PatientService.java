@@ -148,6 +148,7 @@ public class PatientService {
         data.setMaritalStatus(patientEntity.getMaritalStatus());
         data.setEmploymentStatus(patientEntity.getEmploymentStatus());
         data.setSector(patientEntity.getSector());
+        data.setRegisterDate(patientEntity.getRegisterDate());
         data.setAdmissionDate(patientEntity.getAdmissionDate());
         data.setDischargeDate(patientEntity.getDischargeDate());
         return data;
