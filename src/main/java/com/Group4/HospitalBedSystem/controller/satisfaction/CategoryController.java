@@ -1,12 +1,9 @@
 package com.Group4.HospitalBedSystem.controller.satisfaction;
 
-import com.Group4.HospitalBedSystem.entity.PatientEntity;
 import com.Group4.HospitalBedSystem.entity.satification.*;
 import com.Group4.HospitalBedSystem.service.satisfaction.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController

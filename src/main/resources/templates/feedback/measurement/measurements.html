@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!-- boleh jadikan contoh -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" th:href="@{/css/index.css}">
-    <title>Satisfaction Categories</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Measurements</title>
+    <style>
+        /* Custom CSS for table styling */
+        .table thead th {
+            background-color: #f8f9fa;
+            /* Light grey background for header */
+            color: #343a40;
+            /* Dark text color for contrast */
+            font-weight: bold;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+            /* Light grey background on hover */
+        }
+    </style>
 </head>
 
 <body>
@@ -18,32 +33,27 @@
     <div id="sidebar-container"></div>
 
     <!-- Page content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <h1 class="mt-4">Measurements Table</h1>
-            <p>This is the lastest measurement item for Patient Satisfaction Feedback</p>
-            <div class="addItem">
-                <a href="/measurements/add">Add Measurement</a>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <h2>List of Measurements</h2>
+                <div class="addmeasurementlink">
+                    <a href="/measurements/add">Add Measurement</a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Measurement Name</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    <!-- Data will be populated here -->
+                    </tbody>
+                </table>
             </div>
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="measurement : ${measurements}">
-                    <td th:text="${measurement.name}"></td>
-                    <td th:text="${measurement.category.name}"></td>
-                    <td>
-                        <a th:href="@{/measurements/edit/{id}(id=${measurement.id})}">Edit</a>
-                        <a th:href="@{/measurements/delete/{id}(id=${measurement.id})}">Delete</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
@@ -54,37 +64,145 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/js/config.js"></script>
 <script>
-    $(async function () {
+    $(document).ready(async function () {
         var urlParams = new URLSearchParams(window.location.search);
-        var userId = urlParams.get('userId');
-        const url = "http://localhost:8080/userById/" + userId;
-        var userData;
-        var loginType;
+        var employeeId = urlParams.get('employeeId');
+        const userUrl = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
+        var userData, MeasurementsData, CategoriesData, loginType;
+
         try {
-            userData = await fetchData(url);
+            userData = await fetchData(userUrl);
             console.log(userData);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }
-        if (userData.success == true) {
-            loginType = userData.data.admin == true ? "ADMIN" : "DOCTOR";
+        if (userData.success) {
+            loginType = userData.data.admin ? "ADMIN" : "DOCTOR";
         }
+
         $("#header-container").load("header");
         $("#sidebar-container").load("sidebar", function () {
-            // Dynamically set sidebar heading from URL
             $("#sidebar-heading").text(loginType + " VIEW");
         });
         $("#footer-container").load("footer");
-    });
 
-    async function fetchData(url) {
-        return $.ajax({
-            url: url,
-            type: 'GET'
+        // Fetch measurements
+        const measurementsUrl = CONFIG.BASE_URL + "/api/v1/measurements";
+        try {
+            MeasurementsData = await fetchData(measurementsUrl);
+            console.log(MeasurementsData);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+
+        // Fetch categories
+        const categoriesUrl = CONFIG.BASE_URL + "/api/v1/categories";
+        try {
+            CategoriesData = await fetchData(categoriesUrl);
+            console.log(CategoriesData);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+
+        var tableBody = $('#table-body');
+        tableBody.empty(); // Clear existing data
+
+        // Populate table with measurement and category data
+        MeasurementsData.data.forEach(function (measurement, index) {
+            var category = CategoriesData.data.find(cat => cat.id === measurement.categoryId);
+            var categoryName = category ? category.name : 'Unknown';
+
+            var row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${measurement.name}</td>
+                    <td>${categoryName}</td>
+                    <td>
+                        <a href="#" class="edit-btn" data-id="${measurement.id}">
+                            <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a href="#" class="delete-btn" data-id="${measurement.id}">
+                            <i class="fa fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+            `;
+            tableBody.append(row);
         });
-    }
+
+        // Event listeners for edit and delete buttons
+        $(document).on('click', '.edit-btn', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            handleEdit(id);
+        });
+
+        $(document).on('click', '.delete-btn', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            handleDelete(id);
+        });
+
+        async function handleEdit(id) {
+            // Retrieve the current measurement data
+            var measurement = MeasurementsData.data.find(item => item.id === id);
+            if (measurement) {
+                // Show prompt to edit the measurement name
+                var newMeasurementName = prompt("Edit Measurement Name:", measurement.name);
+                if (newMeasurementName !== null && newMeasurementName !== measurement.name) {
+                    // Make an AJAX request to update the measurement on the server
+                    $.ajax({
+                        type: 'PUT',
+                        url: CONFIG.BASE_URL + '/api/v1/updateMeasurement/' + id,
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: id, name: newMeasurementName, categoryId: measurement.categoryId }),
+                        success: function(response) {
+                            alert('Measurement updated successfully.');
+                            location.reload(); // Reload the page to reflect changes
+                        },
+                        error: function(error) {
+                            alert('Error updating measurement.');
+                            console.log('Error updating measurement:', error);
+                        }
+                    });
+                }
+            }
+        }
+
+        async function handleDelete(id) {
+            // Confirm before deleting
+            var confirmDelete = confirm("Are you sure you want to delete this measurement?");
+            if (confirmDelete) {
+                const url3 = CONFIG.BASE_URL + "/api/v1/deleteMeasurement/" + id;
+
+                try {
+                    await $.ajax({
+                        type: 'DELETE',
+                        url: url3,
+                        success: function(response) {
+                            alert('Measurement deleted successfully.');
+                            location.reload(); // Reload the page to reflect changes
+                        },
+                        error: function(error) {
+                            alert('Error deleting measurement.');
+                            console.log('Error deleting measurement:', error);
+                        }
+                    });
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+        }
+
+        async function fetchData(url) {
+            return $.ajax({
+                url: url,
+                type: 'GET'
+            });
+        }
+    });
 </script>
 </body>
-
 </html>

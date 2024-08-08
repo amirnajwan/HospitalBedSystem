@@ -1,18 +1,131 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Measurement</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Add Measurement</h1>
-<form th:action="@{/measurements}" th:object="${measurement}" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" th:field="*{name}">
-    <label for="category">Category:</label>
-    <select id="category" name="category" th:field="*{category.id}">
-        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-    </select>
-    <button type="submit">Add</button>
-</form>
+<!-- Header container -->
+<div id="header-container"></div>
+
+<div id="wrapper">
+    <!-- Sidebar container -->
+    <div id="sidebar-container"></div>
+
+    <!-- Page content -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Add New Measurement into Patient Satisfaction Form</h2>
+                <div class="card-body">
+                    <form id="addnewmeasurementform">
+                        <div class="form-group">
+                            <label for="measurementname">Measurement Name</label>
+                            <input type="text" class="form-control" id="measurementname" name="measurementname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Select Category</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <!-- Categories will be populated here -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">ADD</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer container -->
+<div id="footer-container"></div>
+
+<!-- jQuery and other scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/js/config.js"></script>
+
+<script>
+    $(document).ready(async function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var fromValue = urlParams.get('from');
+        var employeeId = urlParams.get('employeeId');
+        const userUrl = CONFIG.BASE_URL + "/api/v1/userByEmployeeId/" + employeeId;
+        const categoriesUrl = CONFIG.BASE_URL + "/api/v1/categories";
+        var userData, categoriesData;
+        var loginType;
+
+        try {
+            userData = await fetchData(userUrl);
+            categoriesData = await fetchData(categoriesUrl);
+            console.log(userData);
+            console.log(categoriesData);
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+
+        if (userData.success) {
+            loginType = userData.data.admin ? "ADMIN" : "DOCTOR";
+        }
+
+        $("#header-container").load("header.html");
+        $("#sidebar-container").load("sidebar.html", function () {
+            // Dynamically set sidebar heading from URL
+            $("#sidebar-heading").text(loginType + " VIEW");
+        });
+        $("#footer-container").load("footer.html");
+
+        console.log("From: " + fromValue);
+
+        // Populate category dropdown
+        var categorySelect = $('#category');
+        categoriesData.data.forEach(function (category) {
+            var option = `<option value="${category.id}">${category.name}</option>`;
+            categorySelect.append(option);
+        });
+
+        $('#addnewmeasurementform').on('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var measurementData = {
+                name: $('#measurementname').val(),
+                categoryId: $('#category').val()
+            };
+
+            console.log("Measurement Data to Send:", measurementData);
+
+            $.ajax({
+                type: 'POST',
+                url: CONFIG.BASE_URL + '/api/v1/addMeasurement',
+                contentType: 'application/json',
+                data: JSON.stringify(measurementData),
+                success: function (response) {
+                    console.log("Response from Server:", response);
+                    if (response.success) {
+                        alert('Add New Measurement success: ' + response.message);
+                        window.location.href = '/measurements'; // Redirect to measurements page
+                    } else {
+                        console.log('Add New Measurement failed: ' + response.message);
+                        alert('Add New Measurement failed. Please try again.');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error Add New Measurement:', JSON.stringify(error));
+                    alert('Error Add New Measurement: Measurement has been listed');
+                }
+            });
+        });
+    });
+
+    async function fetchData(url) {
+        return $.ajax({
+            url: url,
+            type: 'GET'
+        });
+    }
+</script>
 </body>
 </html>

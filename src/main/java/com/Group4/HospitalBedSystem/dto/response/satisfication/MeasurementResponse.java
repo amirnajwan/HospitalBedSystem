@@ -2,12 +2,14 @@ package com.Group4.HospitalBedSystem.dto.response.satisfication;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class MeasurementResponse {
     private int id;
     private String name;
-   // private int rating;
     private int categoryId;
+    //private List<Feedback> feedbacks;
 
 
 }

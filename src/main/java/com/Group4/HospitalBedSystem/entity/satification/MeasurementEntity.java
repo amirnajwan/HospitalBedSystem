@@ -19,7 +19,6 @@ public class MeasurementEntity {
     @Getter
     @NonNull
     private String name;
-    //private int rating; // values 1 to 5
 
     @Setter
     @Getter

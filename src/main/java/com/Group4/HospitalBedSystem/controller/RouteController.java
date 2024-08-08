@@ -39,9 +39,14 @@ public class RouteController {
 
     //patients satisfaction routing pages
     @GetMapping("/categories")
-    public String viewCategoriesManagement() {return "/feedback/category/categories";}
+    public String viewCategoriesManagement() {return "feedback/category/categories";}
     @GetMapping("/categories/add")
-    public String addCategoriesManagement() {return "/feedback/category/add-category";}
+    public String addCategoriesManagement() {return "feedback/category/add-category";}
+    @GetMapping("/measurements")
+    public String viewMeasurementsManagement() {return "feedback/measurement/measurements";}
+    @GetMapping("/measurements/add")
+    public String addMeasurementsManagement() {return "feedback/measurement/add-measurement";}
+
     //end patients satisfaction pages
 
     @GetMapping("/register")
