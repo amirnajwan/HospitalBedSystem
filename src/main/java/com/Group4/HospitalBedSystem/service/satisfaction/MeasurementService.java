@@ -18,9 +18,6 @@ public class MeasurementService {
     @Autowired
     private MeasurementRepository measurementRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
     public ResponseEntity<?> getMeasurements(){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         List<MeasurementEntity> measurementEntities = measurementRepository.findAll();
@@ -40,26 +37,29 @@ public class MeasurementService {
     }//end getMeasurements()
 
     // Post methods
-    public ResponseEntity<?> saveMeasurements(MeasurementEntity measurementEntity, int categoryId) {
+    public ResponseEntity<?> saveMeasurements(MeasurementEntity measurementEntity){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
-            CategoryEntity category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
-
-            measurementEntity.setCategory(category);
-            measurementRepository.save(measurementEntity);
-
-            result.setSuccess(true);
-            result.setMessage("Added new measurement");
-            result.setData(measurementEntity);
-            return ResponseEntity.ok(result);
-
+            if (measurementEntity != null) {
+                if (measurementRepository.save(measurementEntity) != null) {
+                    result.setSuccess(true);
+                    result.setMessage("Added new a category");
+                    result.setData(measurementEntity);
+                } else {
+                    result.setMessage("Failed to add a measurement");
+                }
+                System.out.println("test");
+                result.setData(measurementEntity);
+                return ResponseEntity.ok(result);
+            } else {
+                result.setMessage("Failed to add a measurement");
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         } catch (Exception e) {
             result.setMessage("Failed to add a measurement : " + e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
-    }
-//end saveMeasurements
+    }//end saveCategory
 
     public MeasurementResponse mapMeasurementEntityToMeasurementDetail (MeasurementEntity measurementEntity){
         MeasurementResponse data = new MeasurementResponse();

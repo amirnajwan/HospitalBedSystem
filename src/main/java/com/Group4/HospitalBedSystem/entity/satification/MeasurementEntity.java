@@ -20,16 +20,14 @@ public class MeasurementEntity {
     @NonNull
     private String name;
 
-
     @Setter
     @Getter
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
 
-
-    //    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Feedback> feedbacks;
 
 }
