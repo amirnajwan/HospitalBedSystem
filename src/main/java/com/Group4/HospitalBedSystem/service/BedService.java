@@ -5,6 +5,7 @@ import com.Group4.HospitalBedSystem.entity.BedEntity;
 import com.Group4.HospitalBedSystem.entity.generator.BedIdgenerator;
 import com.Group4.HospitalBedSystem.repository.BedRepository;
 import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
+import com.zaxxer.hikari.util.SuspendResumeLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +77,29 @@ public class BedService {
                 result.setSuccess(true);
                 result.setMessage("Bed found.");
                 result.setData(this.mapBedEntityToBedDetail(bed));
+            } else {
+                result.setMessage("Bed not found.");
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e){
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> getBedByBedStatus(String bedStatus){
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        List<BedEntity> beds = repository.findAll();
+        try {
+            if (beds != null){
+                result.setSuccess(true);
+                result.setMessage("Bed found.");
+                List<BedResponse> bedList = new ArrayList<>();
+                for (int i = 0; i < beds.size(); i++){
+                    if (beds.get(i).getBedStatus().equals(bedStatus)){
+                        bedList.add(mapBedEntityToBedDetail(beds.get(i)));
+                    }
+                }
+                result.setData(bedList);
             } else {
                 result.setMessage("Bed not found.");
             }

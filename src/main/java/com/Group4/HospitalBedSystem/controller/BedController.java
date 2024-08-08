@@ -28,6 +28,11 @@ public class BedController {
         return service.getBedByBedTypeId(bedTypeId);
     }
 
+    @GetMapping("/api/v1/bedByBedStatus/{bedStatus}")
+    public ResponseEntity<?> getBedsByBedStatus(@PathVariable String bedStatus){
+        return service.getBedByBedStatus(bedStatus);
+    }
+
     @GetMapping("/api/v1/bedById/{id}")
     public ResponseEntity<?> getBedById(@PathVariable int id){
         return service.getBedById(id);

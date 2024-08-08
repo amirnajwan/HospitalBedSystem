@@ -49,6 +49,11 @@ public class RouteController {
 
     //end patients satisfaction pages
 
+    //beds routing
+    @GetMapping("/beds")
+    public String viewAllBeds(){return "/bed/beds";}
+    //end beds
+
     @GetMapping("/register")
     public String register(@RequestParam(name = "from", required = false) String from) {
         return "auth/register";
