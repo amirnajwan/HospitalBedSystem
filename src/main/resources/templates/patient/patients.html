@@ -136,6 +136,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Footer container -->
@@ -305,7 +306,7 @@
                         // Populate dropdown with options from the API
                         data.data.forEach(function (item) {
                             dropdown.append('<option value="' + item.bedTypeId + '" data-price-per-day="' + item.pricePerDay + '">' +
-                                item.bedTypeId + ': Per Day RM ' + item.pricePerDay + '</option>');
+                                item.bedTypeId + ': ' + item.name + ' (RM ' + item.pricePerDay + '/day )</option>');
                         });
 
                         // Show the modal
