@@ -3,7 +3,8 @@ package com.Group4.HospitalBedSystem.entity.satification;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,8 +26,16 @@ public class CategoryEntity {
     @Setter
     @Getter
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<MeasurementEntity> measurements;
+    private List<MeasurementEntity> measurements;
 
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FeedbackEntity> feedbacks;
+
+    public CategoryEntity(int id) {
+        this.id = id;
+    }
 }
 
 

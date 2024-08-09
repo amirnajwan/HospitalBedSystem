@@ -46,6 +46,11 @@ public class RouteController {
     public String viewMeasurementsManagement() {return "feedback/measurement/measurements";}
     @GetMapping("/measurements/add")
     public String addMeasurementsManagement() {return "feedback/measurement/add-measurement";}
+    @GetMapping("/feedbackForm")
+    public String feedbackFormManagement() {return "feedback/feedback/feedback-form";}
+    @GetMapping("/completeFeedback")
+    public String completeFormManagement() {return "feedback/feedback/feedback-complete";}
+
 
     //end patients satisfaction pages
 

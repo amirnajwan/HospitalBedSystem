@@ -105,16 +105,16 @@
                 success: function (response) {
                     console.log("Response from Server:", response);
                     if (response.success) {
-                        alert('Add New Measurement success: ' + response.message);
-                        window.location.href = '/measurements'; // Redirect to measurements page
+                        alert('Measurement added successfully.');
+                        window.location.href = '/measurements';
                     } else {
-                        console.log('Add New Measurement failed: ' + response.message);
-                        alert('Add New Measurement failed. Please try again.');
+                        alert('Failed to add measurement: ' + response.message);
                     }
                 },
                 error: function (error) {
                     console.log('Error Add New Measurement:', JSON.stringify(error));
                     alert('Error Add New Measurement: Measurement has been listed');
+                    alert('Error: ' + JSON.stringify(error));
                 }
             });
         });

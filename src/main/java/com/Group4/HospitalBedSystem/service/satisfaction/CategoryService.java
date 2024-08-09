@@ -77,7 +77,6 @@ public class CategoryService {
         data.setId(categoryEntity.getId());
         data.setName(categoryEntity.getName());
 
-        // Convert Set<Measurement> to List<MeasurementDTO>
         List<MeasurementResponse> measurementResponseList = categoryEntity.getMeasurements().stream()
                 .map(measurementService::mapMeasurementEntityToMeasurementDetail)
                 .collect(Collectors.toList());

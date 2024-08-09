@@ -1,6 +1,5 @@
 package com.Group4.HospitalBedSystem.service.satisfaction;
 
-import com.Group4.HospitalBedSystem.dto.response.satisfication.CategoryResponse;
 import com.Group4.HospitalBedSystem.dto.response.satisfication.MeasurementResponse;
 import com.Group4.HospitalBedSystem.entity.satification.*;
 import com.Group4.HospitalBedSystem.repository.satisfaction.*;
@@ -17,6 +16,9 @@ import java.util.List;
 public class MeasurementService {
     @Autowired
     private MeasurementRepository measurementRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public ResponseEntity<?> getMeasurements(){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
@@ -37,29 +39,24 @@ public class MeasurementService {
     }//end getMeasurements()
 
     // Post methods
-    public ResponseEntity<?> saveMeasurements(MeasurementEntity measurementEntity){
+    public ResponseEntity<?> saveMeasurements(MeasurementEntity measurementEntity, int categoryId){
         SuccessAndDataResponse result = new SuccessAndDataResponse();
         try {
-            if (measurementEntity != null) {
-                if (measurementRepository.save(measurementEntity) != null) {
-                    result.setSuccess(true);
-                    result.setMessage("Added new a category");
-                    result.setData(measurementEntity);
-                } else {
-                    result.setMessage("Failed to add a measurement");
-                }
-                System.out.println("test");
-                result.setData(measurementEntity);
-                return ResponseEntity.ok(result);
-            } else {
-                result.setMessage("Failed to add a measurement");
-                return new ResponseEntity<>(result, HttpStatus.OK);
-            }
+            CategoryEntity category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+
+            measurementEntity.setCategory(category);
+            measurementRepository.save(measurementEntity);
+
+            result.setSuccess(true);
+            result.setMessage("Added new measurement");
+            result.setData(measurementEntity);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             result.setMessage("Failed to add a measurement : " + e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
-    }//end saveCategory
+    }//end saveMeasurements
 
     public MeasurementResponse mapMeasurementEntityToMeasurementDetail (MeasurementEntity measurementEntity){
         MeasurementResponse data = new MeasurementResponse();
@@ -70,6 +67,13 @@ public class MeasurementService {
         } else {
             data.setCategoryId(0); // Handle the case where category might be null
         }
+
+//        List<FeedbackMeasurementResponse> feedbackMeasurementResponseList = measurementEntity.getFeedbackMeasurementEntityList().stream()
+//                .map(feedbackMeasurementService::mapMeasurementEntityToMeasurementDetail)
+//                .collect(Collectors.toList());
+//
+//        data.setFeedbackMeasurementEntityList(feedbackMeasurementResponseList);
+
         return data;
     }//end mapMeasurementEntityToMeasurementDetail
     public ResponseEntity<?> updateMeasurements(MeasurementEntity measurementEntity) {
@@ -123,9 +127,6 @@ public class MeasurementService {
 //        return measurementRepository.save(measurement);
 //    }
 //
-//    public void deleteMeasurement(int id) {
-//        measurementRepository.deleteById(id);
-//    }
 //    public List<MeasurementEntity> getMeasurementsByCategory(int categoryId) {
 //        return measurementRepository.findByCategoryId(categoryId);
 //    }

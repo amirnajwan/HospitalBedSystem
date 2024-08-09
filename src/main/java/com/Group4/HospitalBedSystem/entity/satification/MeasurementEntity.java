@@ -3,6 +3,8 @@ package com.Group4.HospitalBedSystem.entity.satification;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,11 +25,13 @@ public class MeasurementEntity {
     @Setter
     @Getter
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 
+    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FeedbackEntity> feedbacks;
 
-//    @OneToMany(mappedBy = "measurement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Feedback> feedbacks;
-
+    public MeasurementEntity(int id) {
+        this.id = id;
+    }
 }

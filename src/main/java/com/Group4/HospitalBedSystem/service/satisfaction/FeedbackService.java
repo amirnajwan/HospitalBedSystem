@@ -2,10 +2,12 @@ package com.Group4.HospitalBedSystem.service.satisfaction;
 
 import com.Group4.HospitalBedSystem.entity.satification.*;
 import com.Group4.HospitalBedSystem.repository.satisfaction.*;
+import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.time.LocalDateTime;
 
 @Service
@@ -13,35 +15,55 @@ public class FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    public List<Feedback> getAllFeedbacks() {
-        return feedbackRepository.findAll();
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private MeasurementRepository measurementRepository;
+
+    public ResponseEntity<?> submitFeedback(FeedbackEntity feedbackEntity) {
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try {
+            if (feedbackEntity != null) {
+                // Assuming you're passing the categoryId and measurementId in the FeedbackEntity
+                Integer categoryId = feedbackEntity.getCategory() != null ? feedbackEntity.getCategory().getId() : null;
+                Integer measurementId = feedbackEntity.getMeasurement() != null ? feedbackEntity.getMeasurement().getId() : null;
+
+                if (categoryId != null && measurementId != null) {
+                    // Fetch the associated CategoryEntity and MeasurementEntity
+                    CategoryEntity category = categoryRepository.findById(categoryId)
+                            .orElseThrow(() -> new Exception("Category not found"));
+                    MeasurementEntity measurement = measurementRepository.findById(measurementId)
+                            .orElseThrow(() -> new Exception("Measurement not found"));
+
+                    // Set these entities into the feedbackEntity
+                    feedbackEntity.setCategory(category);
+                    feedbackEntity.setMeasurement(measurement);
+                    feedbackEntity.setTimestamp(LocalDateTime.now()); // Set the timestamp
+
+                    // Save the feedback
+                    FeedbackEntity savedFeedback = feedbackRepository.save(feedbackEntity);
+                    result.setSuccess(true);
+                    result.setMessage("Added new feedback");
+                    result.setData(savedFeedback);
+
+                    return ResponseEntity.ok(result);
+                } else {
+                    result.setMessage("Category or Measurement ID is missing");
+                    return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                result.setMessage("FeedbackEntity is null");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            result.setMessage("Failed to add feedback: " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public Feedback saveFeedback(Feedback feedback) {
-        //feedback.setTimestamp(LocalDateTime.now());
-        return feedbackRepository.save(feedback);
-    }
-
-    public List<Feedback> getFeedbackByCategory(int categoryId) {
-        return feedbackRepository.findByMeasurementCategoryId(categoryId);
-    }
-
-    public List<Feedback> getFeedbackByMeasurementId(int measurementId) {
-        return feedbackRepository.findByMeasurementId(measurementId);
-    }
-
-    public List<Feedback> getFeedbackByRating(int rating) {
-        return feedbackRepository.findByRating(rating);
-    }
-//satu
-//    public double calculateAverageRating(List<Feedback> feedbacks) {
-//        int totalRating = (int) feedbacks.stream().mapToInt(Feedback::getRating).sum();
-//        return (double) totalRating / feedbacks.size();
-//    }
-
-    //dua
-    public double getAverageRating(int measurementId) {
-        return feedbackRepository.findAverageRatingByMeasurementId(measurementId);
+    public long getTotalFeedbackCount(int categoryId, int measurementId) {
+        return feedbackRepository.countByCategoryIdAndMeasurementId(categoryId, measurementId);
     }
 
 }
