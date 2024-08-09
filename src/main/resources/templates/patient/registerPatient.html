@@ -36,6 +36,14 @@
                                     <input type="text" class="form-control" id="name" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneNumber">Phone Number</label>
+                                    <input type="number" class="form-control" id="phoneNumber" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="age">Age</label>
                                     <input type="number" class="form-control" id="age" required>
                                 </div>
@@ -188,6 +196,8 @@
             event.preventDefault();
 
             var name = $('#name').val();
+            var email = $('#email').val();
+            var phoneNumber = $('#phoneNumber').val();
             var age = $('#age').val();
             var gender = $('input[name="gender"]:checked').val();
             var maritalStatus = $('input[name="maritalStatus"]:checked').val();
@@ -198,6 +208,8 @@
 
             var patientData = {
                 name: name,
+                email: email,
+                phoneNumber: phoneNumber,
                 age: age,
                 gender: gender,
                 maritalStatus: maritalStatus,

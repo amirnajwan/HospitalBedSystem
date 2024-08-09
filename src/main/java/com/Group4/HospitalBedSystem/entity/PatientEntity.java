@@ -19,6 +19,8 @@ public class PatientEntity {
     private String patientId;
     private int admissionId;
     private String name;
+    private String email;
+    private String phoneNumber;
     private int age;
     private String gender;
     private String maritalStatus;
@@ -38,6 +40,22 @@ public class PatientEntity {
 
     public String getPatientId() {
         return patientId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void setPatientId(String patientId) {

@@ -192,14 +192,6 @@
                             <label for="dischargeSummary" class="form-label">Discharge Summary</label>
                             <input type="text" class="form-control" id="dischargeSummary" required>
                         </div>
-                        <!--
-                        <div class="form-group mb-3">
-                            <label for="dropdown" class="form-label">Select Bed</label>
-                            <select id="dropdown" class="form-control" required>
-                                Options will be populated here
-                            </select>
-                        </div>
-                        -->
                         <div class="form-group mb-3">
                             <label for="dischargeDate" class="form-label">Discharge Date</label>
                             <input type="date" class="form-control" id="dischargeDate" required>
@@ -274,12 +266,12 @@
                 row.append('<td>' +
                     '<div class="action-buttons">' +
                     '<a href="#" class="text-success admit-link' +
-                    ((patient.admissionDate != null) ? ' disabled' : '') +
+                    ((patient.admissionDate != null) || loginType == 'DOCTOR' ? ' disabled' : '') +
                     '" data-patient-id="' + patient.patientId + '">' +
                     'Admit' +
                     '</a>' +
                     '<a href="#" class="text-danger discharge-link' +
-                    ((patient.dischargeDate != null || patient.admissionDate == null) ? ' disabled' : '') +
+                    ((patient.dischargeDate != null || patient.admissionDate == null) || loginType == 'ADMIN' ? ' disabled' : '') +
                     '" data-patient-id="' + patient.patientId + '"' +
                     '" data-admission-id="' + patient.admissionId + '"' +
                     ' data-user-id="' + employeeId + '">' +
@@ -330,26 +322,6 @@
                 $('#admissionIdInput').val(admissionId); // Set admission ID in hidden input
                 var dischargeModal = new bootstrap.Modal(document.getElementById('dischargeModal'));
                 dischargeModal.show();
-                // $.ajax({
-                //     url: CONFIG.BASE_URL + '/api/v1/bedByBedStatus/Available', // Replace with your API endpoint
-                //     method: 'GET',
-                //     success: function (data) {
-                //         var dropdown = $('#dropdown');
-                //         dropdown.empty(); // Clear existing options
-
-                //         // Populate dropdown with options from the API
-                //         data.data.forEach(function (item) {
-                //             dropdown.append('<option value="' + item.bedTypeId + '">' + item.bedTypeId + ': Per Day RM ' + item.pricePerDay + '</option>');
-                //         });
-
-                //         // Show the modal
-                //         var dischargeModal = new bootstrap.Modal(document.getElementById('dischargeModal'));
-                //         dischargeModal.show();
-                //     },
-                //     error: function (xhr, status, error) {
-                //         console.error('Failed to fetch options:', error);
-                //     }
-                // });
             });
 
             // Handle form submission

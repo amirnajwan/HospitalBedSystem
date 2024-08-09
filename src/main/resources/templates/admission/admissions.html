@@ -22,6 +22,63 @@
             background-color: #f1f1f1;
             /* Light grey background on hover */
         }
+
+        /* Custom CSS */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            /* Space between buttons */
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 12px;
+            /* Add padding for better click area */
+            border-radius: 5px;
+            /* Rounded corners */
+            transition: background-color 0.3s, color 0.3s;
+            /* Smooth transition */
+        }
+
+        /* Style for enabled buttons */
+        .action-buttons a.text-success {
+            color: #28a745;
+            /* Green text color */
+        }
+
+        .action-buttons a.text-success:hover {
+            background-color: #d4edda;
+            /* Light green background */
+            color: #155724;
+            /* Darker green text color */
+        }
+
+        .action-buttons a.text-danger {
+            color: #dc3545;
+            /* Red text color */
+        }
+
+        .action-buttons a.text-danger:hover {
+            background-color: #f8d7da;
+            /* Light red background */
+            color: #721c24;
+            /* Darker red text color */
+        }
+
+        /* Style for disabled buttons */
+        .action-buttons a.disabled {
+            color: #6c757d !important;
+            /* Grey text color, with !important to override other styles */
+            /* background-color: #e9ecef; */
+            /* Light grey background */
+            cursor: not-allowed;
+            /* Change cursor to indicate disabled state */
+            pointer-events: none;
+            /* Prevent click events */
+            opacity: 0.6;
+            /* Optional: make button more visually muted */
+        }
     </style>
 </head>
 
@@ -54,6 +111,7 @@
                                     <th>Paid</th>
                                     <th>Amount (RM)</th>
                                     <th>Transaction ID</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="table-body">
@@ -128,7 +186,89 @@
                 row.append(paidCell);
                 row.append('<td>' + (admission.amount ?? '-') + '</td>');
                 row.append('<td>' + (admission.transactionId ?? '-') + '</td>');
+                row.append('<td>' +
+                    '<div class="action-buttons">' +
+                    '<a href="#" class="text-success pay-link' +
+                    ((admission.paid == true || admission.dischargeDate == null) ? ' disabled' : '') +
+                    '" data-patient-id="' + admission.patientId +
+                    '" data-admission-id="' + admission.admissionId + '"' +
+                    ' data-amount="' + admission.amount + '">' +
+                    'PAY' +
+                    '</a>' +
+                    // '<a href="#" class="text-danger PDF-link' +
+                    // (admission.paid == false ? ' disabled' : '') +
+                    // '" data-patient-id="' + admission.patientId + '"' +
+                    // '" data-admission-id="' + admission.admissionId + '"' +
+                    // ' data-user-id="' + employeeId + '">' +
+                    // 'PDF' +
+                    // '</a>' +
+                    '</div>' +
+                    '</td>');
                 tableBody.append(row);
+            });
+
+            // Handle click on the discharge button
+            $(document).on('click', '.pay-link', async function (event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                var patientId = $(this).data('patient-id'); 
+                var admissionId = $(this).data('admission-id');
+                var amount = $(this).data('amount');
+
+                var patientData;
+                try {
+                    patientData = await fetchData(CONFIG.BASE_URL + "/api/v1/patientByPatientId/" + patientId);
+                } catch (error) {
+                    console.log(error);
+                }
+                // $('#patientIdInput').val(patientId); // Set patient ID in hidden input
+                // $('#userIdInput').val(userId); // Set patient ID in hidden input
+                // $('#admissionIdInput').val(admissionId); // Set admission ID in hidden input
+                var confirmed = confirm("Are you sure you want to pay?");
+                if (confirmed) {
+                    const urlToyib = CONFIG.TOYYIB_URL + "/index.php/api/createBill";
+                    console.log(urlToyib);
+                    var someData = new FormData();
+                    someData.append('userSecretKey', CONFIG.SECRET_KEY);
+                    someData.append('categoryCode', CONFIG.CAT_CODE);
+                    someData.append('billName', 'Payment for ' + admissionId);
+                    someData.append('billDescription', 'Total discharge fee for Mini Hospital System');
+                    someData.append('billPriceSetting', 1);
+                    someData.append('billPayorInfo', 1);
+                    someData.append('billAmount', amount * 100); // here
+                    someData.append('billReturnUrl', CONFIG.BASE_URL+'/admissions?employeeId=' + employeeId); // here
+                    someData.append('billCallbackUrl', CONFIG.BASE_URL+'/api/v1/paymentCallback'); // not sure
+                    someData.append('billExternalReferenceNo', admissionId); // here
+                    someData.append('billTo', patientData.data.name); // here
+                    someData.append('billEmail', patientData.data.email); // here
+                    someData.append('billPhone', patientData.data.phoneNumber);
+                    someData.append('billSplitPayment', 0);
+                    someData.append('billSplitPaymentArgs', '');
+                    someData.append('billPaymentChannel', 0);
+                    someData.append('billContentEmail', 'Thank you for completing the payment!');
+                    someData.append('billChargeToCustomer', 1);
+                    someData.append('billExpiryDate', '31-12-2024 17:00:00');
+                    someData.append('billExpiryDays', 3);
+
+                    console.log(someData);
+
+                    $.ajax({
+                        url: urlToyib,
+                        type: 'POST',
+                        data: someData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            console.log('Success:', response);
+                            alert("Will be redirected to the payment page.");
+                            //https://dev.toyyibpay.com/
+                            var data = JSON.parse(response);
+                            window.location.href = 'https://dev.toyyibpay.com/' + data[0].BillCode;
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Error:', textStatus, errorThrown);
+                        }
+                    });
+                }
             });
         });
 

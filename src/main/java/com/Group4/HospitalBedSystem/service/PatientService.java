@@ -2,6 +2,7 @@ package com.Group4.HospitalBedSystem.service;
 
 import com.Group4.HospitalBedSystem.dto.response.PatientResponse;
 import com.Group4.HospitalBedSystem.entity.PatientEntity;
+import com.Group4.HospitalBedSystem.entity.UserEntity;
 import com.Group4.HospitalBedSystem.entity.generator.PatientIdGenerator;
 import com.Group4.HospitalBedSystem.repository.PatientRepository;
 import com.Group4.HospitalBedSystem.service.general.SuccessAndDataResponse;
@@ -102,6 +103,23 @@ public class PatientService {
         }
     }
 
+    public ResponseEntity<?> getPatientByPatientId(String patientId) { // get 1 object
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try {
+            PatientEntity patient = repository.findPatientByPatientId(patientId);
+            if (patient != null) {
+                result.setSuccess(true);
+                result.setMessage("patient found.");
+                result.setData(this.mapPatientEntityToPatientDetail(patient));
+            } else {
+                result.setMessage("patient not found.");
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // Delete method
     public ResponseEntity<?> deletePatient(int id) {
         SuccessAndDataResponse result = new SuccessAndDataResponse();
@@ -144,6 +162,8 @@ public class PatientService {
         data.setPatientId(patientEntity.getPatientId());
         data.setAdmissionId(patientEntity.getAdmissionId());
         data.setName(patientEntity.getName());
+        data.setEmail(patientEntity.getEmail());
+        data.setPhoneNumber(patientEntity.getPhoneNumber());
         data.setAge(patientEntity.getAge());
         data.setGender(patientEntity.getGender());
         data.setMaritalStatus(patientEntity.getMaritalStatus());

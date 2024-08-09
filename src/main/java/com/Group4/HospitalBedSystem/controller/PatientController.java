@@ -33,6 +33,11 @@ public class PatientController {
         return service.getPatientByName(name);
     }
 
+    @GetMapping("/api/v1/patientByPatientId/{patientId}")
+    public ResponseEntity<?> getPatientByPatientId(@PathVariable String patientId){
+        return service.getPatientByPatientId(patientId);
+    }
+
     //updatePatientDischargeDate
     @PutMapping("/api/v1/updatePatientDischargeDate")
     public ResponseEntity<?> updatePatientDischargeDate(@RequestBody PatientEntity patient){

@@ -1,6 +1,7 @@
 package com.Group4.HospitalBedSystem.service;
 
 import com.Group4.HospitalBedSystem.dto.response.AdmissionResponse;
+import com.Group4.HospitalBedSystem.dto.response.PaymentCallbackData;
 import com.Group4.HospitalBedSystem.entity.AdmissionEntity;
 import com.Group4.HospitalBedSystem.entity.PatientEntity;
 import com.Group4.HospitalBedSystem.entity.generator.AdmissionIdGenerator;
@@ -60,6 +61,8 @@ public class AdmissionService {
         }
     }
 
+
+
     // Post methods
     public ResponseEntity<?> saveAdmission(AdmissionEntity admission) {
         SuccessAndDataResponse result = new SuccessAndDataResponse();
@@ -98,6 +101,36 @@ public class AdmissionService {
                 existAdmission.setDischargeSummary(admission.getDischargeSummary());
                 existAdmission.setDischargeDate(admission.getDischargeDate());
                 existAdmission.setAmount(admission.getAmount());
+                if (repository.save(existAdmission) != null) {
+                    result.setSuccess(true);
+                    result.setMessage("Successfully update a admission.");
+                    result.setData(existAdmission);
+                } else {
+                    result.setMessage("Failed to update a admission.");
+                }
+            } else {
+                result.setMessage("admission not found.");
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> updateAdmissionFromPayment(PaymentCallbackData pay) {
+        SuccessAndDataResponse result = new SuccessAndDataResponse();
+        try {
+            AdmissionEntity existAdmission = repository.findAdmissionByAdmissionId(pay.getOrder_id());
+            if (existAdmission != null) {
+                existAdmission.setId(existAdmission.getId());
+                existAdmission.setPatientId(existAdmission.getPatientId());
+                existAdmission.setBedId(existAdmission.getBedId());
+                existAdmission.setDischargeBy(existAdmission.getDischargeBy());
+                existAdmission.setDischargeSummary(existAdmission.getDischargeSummary());
+                existAdmission.setDischargeDate(existAdmission.getDischargeDate());
+                existAdmission.setAmount(existAdmission.getAmount());
+                existAdmission.setPaid(pay.getStatus_id() == 1 ? true : false);
+                existAdmission.setTransactionId(pay.getTransaction_id());
                 if (repository.save(existAdmission) != null) {
                     result.setSuccess(true);
                     result.setMessage("Successfully update a admission.");
