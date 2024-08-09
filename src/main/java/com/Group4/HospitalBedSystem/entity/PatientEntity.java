@@ -17,6 +17,7 @@ public class PatientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String patientId;
+    private int admissionId;
     private String name;
     private int age;
     private String gender;
@@ -41,6 +42,14 @@ public class PatientEntity {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public int getAdmissionId() {
+        return admissionId;
+    }
+
+    public void setAdmissionId(int admissionId) {
+        this.admissionId = admissionId;
     }
 
     public String getName() {

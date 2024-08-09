@@ -192,7 +192,7 @@
             var gender = $('input[name="gender"]:checked').val();
             var maritalStatus = $('input[name="maritalStatus"]:checked').val();
             var employmentStatus = $('input[name="employmentStatus"]:checked').val();
-            var sector = $('#sector').val();
+            var sector = $('#sector').val() != '' ? $('#sector').val() : null;
             var d = new Date();
             var registerDate =  d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 

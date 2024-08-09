@@ -6,6 +6,7 @@ import lombok.Data;
 public class PatientResponse {
     private int id;
     private String patientId;
+    private int admissionId;
     private String name;
     private int age;
     private String gender;
@@ -30,6 +31,14 @@ public class PatientResponse {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public int getAdmissionId() {
+        return admissionId;
+    }
+
+    public void setAdmissionId(int admissionId) {
+        this.admissionId = admissionId;
     }
 
     public String getName() {

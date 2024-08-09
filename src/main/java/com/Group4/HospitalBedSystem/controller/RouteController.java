@@ -32,6 +32,10 @@ public class RouteController {
     public String patients() {
         return "patient/patients";
     }
+    @GetMapping("/admissions")
+    public String admissions() {
+        return "admission/admissions";
+    }
     @GetMapping("/page1") // sambung disini
     public String page1() {
         return "page1";

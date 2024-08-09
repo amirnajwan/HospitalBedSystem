@@ -142,6 +142,7 @@ public class PatientService {
         PatientResponse data = new PatientResponse();
         data.setId(patientEntity.getId());
         data.setPatientId(patientEntity.getPatientId());
+        data.setAdmissionId(patientEntity.getAdmissionId());
         data.setName(patientEntity.getName());
         data.setAge(patientEntity.getAge());
         data.setGender(patientEntity.getGender());

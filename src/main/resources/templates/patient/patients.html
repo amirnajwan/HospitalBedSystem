@@ -6,6 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/index.css">
     <title>Patients</title>
     <style>
@@ -21,6 +28,63 @@
         .table tbody tr:hover {
             background-color: #f1f1f1;
             /* Light grey background on hover */
+        }
+
+        /* Custom CSS */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            /* Space between buttons */
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 12px;
+            /* Add padding for better click area */
+            border-radius: 5px;
+            /* Rounded corners */
+            transition: background-color 0.3s, color 0.3s;
+            /* Smooth transition */
+        }
+
+        /* Style for enabled buttons */
+        .action-buttons a.text-success {
+            color: #28a745;
+            /* Green text color */
+        }
+
+        .action-buttons a.text-success:hover {
+            background-color: #d4edda;
+            /* Light green background */
+            color: #155724;
+            /* Darker green text color */
+        }
+
+        .action-buttons a.text-danger {
+            color: #dc3545;
+            /* Red text color */
+        }
+
+        .action-buttons a.text-danger:hover {
+            background-color: #f8d7da;
+            /* Light red background */
+            color: #721c24;
+            /* Darker red text color */
+        }
+
+        /* Style for disabled buttons */
+        .action-buttons a.disabled {
+            color: #6c757d !important;
+            /* Grey text color, with !important to override other styles */
+            /* background-color: #e9ecef; */
+            /* Light grey background */
+            cursor: not-allowed;
+            /* Change cursor to indicate disabled state */
+            pointer-events: none;
+            /* Prevent click events */
+            opacity: 0.6;
+            /* Optional: make button more visually muted */
         }
 
         th.asc::after {
@@ -43,8 +107,8 @@
 
         <!-- Page content -->
         <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <div class="col">
                     <h2 class="mb-4">List of Patients</h2>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover">
@@ -61,6 +125,7 @@
                                     <th onclick="sortTable(8)">Register Date</th>
                                     <th onclick="sortTable(9)">Admission Date</th>
                                     <th onclick="sortTable(10)">Discharge Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="table-body">
@@ -76,9 +141,86 @@
     <!-- Footer container -->
     <div id="footer-container"></div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Modal HTML -->
+    <!-- Modal HTML for Bootstrap 5 -->
+    <div class="modal fade" id="admitModal" tabindex="-1" aria-labelledby="admitModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="admitModalLabel">Admit Patient</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <form id="admitForm">
+                        <div class="form-group mb-3">
+                            <label for="diagnosis" class="form-label">Diagnosis</label>
+                            <input type="text" class="form-control" id="diagnosis" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="dropdown" class="form-label">Select Bed</label>
+                            <select id="dropdown" class="form-control" required>
+                                <!-- Options will be populated here -->
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="admissionDate" class="form-label">Admission Date</label>
+                            <input type="date" class="form-control" id="admissionDate" required>
+                        </div>
+                        <input type="hidden" id="patientIdInput">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary" form="admitForm">Admit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal HTML for Bootstrap 5 -->
+    <div class="modal fade" id="dischargeModal" tabindex="-1" aria-labelledby="dischargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dischargeModalLabel">Discharge Patient</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                    <form id="dischargeForm">
+                        <div class="form-group mb-3">
+                            <label for="dischargeSummary" class="form-label">Discharge Summary</label>
+                            <input type="text" class="form-control" id="dischargeSummary" required>
+                        </div>
+                        <!--
+                        <div class="form-group mb-3">
+                            <label for="dropdown" class="form-label">Select Bed</label>
+                            <select id="dropdown" class="form-control" required>
+                                Options will be populated here
+                            </select>
+                        </div>
+                        -->
+                        <div class="form-group mb-3">
+                            <label for="dischargeDate" class="form-label">Discharge Date</label>
+                            <input type="date" class="form-control" id="dischargeDate" required>
+                        </div>
+                        <input type="hidden" id="patientIdInput">
+                        <input type="hidden" id="userIdInput">
+                        <input type="hidden" id="admissionIdInput">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary" form="dischargeForm">Discharge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="\js\config.js"></script>
     <script>
         $(document).ready(async function () {
@@ -114,6 +256,8 @@
             var tableBody = $('#table-body');
             tableBody.empty(); // Clear existing data
             patientsData.data.forEach(function (patient, index) {
+                var admitDisabled = patient.admissionDate && !patient.dischargeDate ? 'style="pointer-events: none;"' : '';
+                var dischargeDisabled = patient.dischargeDate ? 'style="pointer-events: none;"' : '';
                 var row = $('<tr></tr>');
                 row.append('<td>' + (index + 1) + '</td>');
                 row.append('<td>' + patient.patientId + '</td>');
@@ -122,11 +266,193 @@
                 row.append('<td>' + patient.gender + '</td>');
                 row.append('<td>' + patient.maritalStatus + '</td>');
                 row.append('<td>' + patient.employmentStatus + '</td>');
-                row.append('<td>' + patient.sector + '</td>');
+                row.append('<td>' + (patient.sector ?? '-') + '</td>');
                 row.append('<td>' + patient.registerDate + '</td>');
                 row.append('<td>' + (patient.admissionDate ?? '-') + '</td>');
                 row.append('<td>' + (patient.dischargeDate ?? '-') + '</td>');
+                row.append('<td>' +
+                    '<div class="action-buttons">' +
+                    '<a href="#" class="text-success admit-link' +
+                    ((patient.admissionDate != null) ? ' disabled' : '') +
+                    '" data-patient-id="' + patient.patientId + '">' +
+                    'Admit' +
+                    '</a>' +
+                    '<a href="#" class="text-danger discharge-link' +
+                    ((patient.dischargeDate != null || patient.admissionDate == null) ? ' disabled' : '') +
+                    '" data-patient-id="' + patient.patientId + '"' +
+                    '" data-admission-id="' + patient.admissionId + '"' +
+                    ' data-user-id="' + employeeId + '">' +
+                    'Discharge' +
+                    '</a>' +
+                    '</div>' +
+                    '</td>');
                 tableBody.append(row);
+            });
+
+
+            // Handle click on the Admit button
+            $(document).on('click', '.admit-link', function (event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                var patientId = $(this).data('patient-id'); // Get patient ID from data attribute
+                $('#patientIdInput').val(patientId); // Set patient ID in hidden input
+                $.ajax({
+                    url: CONFIG.BASE_URL + '/api/v1/bedByBedStatus/Available', // Replace with your API endpoint
+                    method: 'GET',
+                    success: function (data) {
+                        var dropdown = $('#dropdown');
+                        dropdown.empty(); // Clear existing options
+
+                        // Populate dropdown with options from the API
+                        data.data.forEach(function (item) {
+                            dropdown.append('<option value="' + item.bedTypeId + '" data-price-per-day="' + item.pricePerDay + '">' +
+                                item.bedTypeId + ': Per Day RM ' + item.pricePerDay + '</option>');
+                        });
+
+                        // Show the modal
+                        var admitModal = new bootstrap.Modal(document.getElementById('admitModal'));
+                        admitModal.show();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Failed to fetch options:', error);
+                    }
+                });
+            });
+
+            // Handle click on the discharge button
+            $(document).on('click', '.discharge-link', function (event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                var patientId = $(this).data('patient-id'); // Get patient ID from data attribute
+                var userId = $(this).data('user-id');
+                var admissionId = $(this).data('admission-id');
+                $('#patientIdInput').val(patientId); // Set patient ID in hidden input
+                $('#userIdInput').val(userId); // Set patient ID in hidden input
+                $('#admissionIdInput').val(admissionId); // Set admission ID in hidden input
+                var dischargeModal = new bootstrap.Modal(document.getElementById('dischargeModal'));
+                dischargeModal.show();
+                // $.ajax({
+                //     url: CONFIG.BASE_URL + '/api/v1/bedByBedStatus/Available', // Replace with your API endpoint
+                //     method: 'GET',
+                //     success: function (data) {
+                //         var dropdown = $('#dropdown');
+                //         dropdown.empty(); // Clear existing options
+
+                //         // Populate dropdown with options from the API
+                //         data.data.forEach(function (item) {
+                //             dropdown.append('<option value="' + item.bedTypeId + '">' + item.bedTypeId + ': Per Day RM ' + item.pricePerDay + '</option>');
+                //         });
+
+                //         // Show the modal
+                //         var dischargeModal = new bootstrap.Modal(document.getElementById('dischargeModal'));
+                //         dischargeModal.show();
+                //     },
+                //     error: function (xhr, status, error) {
+                //         console.error('Failed to fetch options:', error);
+                //     }
+                // });
+            });
+
+            // Handle form submission
+            $('#admitForm').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var diagnosis = $('#diagnosis').val();
+                var admissionDate = $('#admissionDate').val();
+                var patientId = $('#patientIdInput').val();
+                // var selectedOption = $('#dropdown').val(); // Get selected option value
+                var selectedOption = $(this).find('option:selected');
+                var bedTypeId = selectedOption.val(); // Gets the bedTypeId
+                var pricePerDay = selectedOption.data('price-per-day'); // Gets the pricePerDay
+                // var amount = 20;
+
+                var admissionData = {
+                    patientId: patientId,
+                    bedId: bedTypeId,
+                    diagnosis: diagnosis,
+                    admissionDate: admissionDate,
+                    amount: null,
+                    rateBed: pricePerDay
+                };
+
+                console.log(admissionData);
+
+                $.ajax({
+                    type: 'POST',
+                    url: CONFIG.BASE_URL + '/api/v1/addAdmission',
+                    contentType: 'application/json',
+                    data: JSON.stringify(admissionData),
+                    success: function (response) {
+                        if (response.success == true) {
+                            alert('Admit a patient successfully!');
+                            location.reload();
+                        } else {
+                            console.log('Process failed: ' + response.message)
+                            alert('Process failed. Please try again');
+                        }
+                    },
+                    error: function (error) {
+                        console.log('Error : ' + JSON.stringify(error));
+                        alert('Error!');
+                    }
+                });
+            });
+
+            // Handle form submission
+            $('#dischargeForm').on('submit', async function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var dischargeSummary = $('#dischargeSummary').val();
+                var userId = $('#userIdInput').val();
+                var patientId = $('#patientIdInput').val();
+                var admissionId = $('#admissionIdInput').val();
+                var dischargeDate = $('#dischargeDate').val();
+                // var amount = 20;
+                var admissionData = await fetchData(CONFIG.BASE_URL + '/api/v1/admissionById/' + admissionId);
+
+                console.log("admissionData");
+                console.log(admissionData);
+
+                //calculate date and times with rate bed
+                // Convert the date strings to Date objects
+                var dateObjAdmit = new Date(admissionData.data.admissionDate);
+                var dateObjDischarge = new Date(dischargeDate);
+                // Calculate the difference in time (milliseconds)
+                var timeDifference = dateObjDischarge - dateObjAdmit;
+                // Convert the time difference to days
+                var dayDifference = timeDifference / (1000 * 3600 * 24);
+
+                var amount = dayDifference * admissionData.data.rateBed;
+                var bedId = admissionData.data.bedId;
+
+                var dischargeData = {
+                    id: admissionId,
+                    patientId: patientId,
+                    bedId: bedId,
+                    dischargeBy: userId,
+                    dischargeSummary: dischargeSummary,
+                    amount: amount,
+                    dischargeDate: dischargeDate
+                };
+
+                $.ajax({
+                    type: 'PUT',
+                    url: CONFIG.BASE_URL + '/api/v1/updateAdmission',
+                    contentType: 'application/json',
+                    data: JSON.stringify(dischargeData),
+                    success: function (response) {
+                        if (response.success == true) {
+                            console.log(dischargeData);
+                            alert('Discharge a patient successfully. Total days in bed is ' + dayDifference + ', so the total amount is RM ' + amount);
+                            location.reload();
+                        } else {
+                            console.log('Process failed: ' + response.message)
+                            alert('Process failed. Please try again');
+                        }
+                    },
+                    error: function (error) {
+                        console.log('Error : ' + JSON.stringify(error));
+                        alert('Error!');
+                    }
+                });
             });
         });
 
