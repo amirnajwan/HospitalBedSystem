@@ -17,4 +17,4 @@ GROUP MEMBER:
 - BACHELOR DEGREE INFORMATION TECHNOLOGY (DIGITAL MEDIA DESIGN)
 - INTERNATIONAL ISLAMIC UNIVERSITY MALAYSIA
 
-
+Link to our Google Drive to access all the materials - [Click here](https://drive.google.com/drive/folders/1XYcj_0QFISQ0lmwJliIZxuC-h1NuFHUS)
